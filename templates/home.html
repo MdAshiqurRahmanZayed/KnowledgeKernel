@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load course_custom_tags %}
+{% block content %}
+<div class="container mt-3 ">
+     <div class="row mt-5">
+          {% for course in courses %}
+
+          <div class="col mx-auto">
+               <div class="card mx-auto" style="width: 18rem;">
+                    <img src="{{course.thumbnail.url}}" class="card-img-top"
+                         alt="...">
+                    <div class="card-body">
+                         <b>
+                              <h4 class="card-title">{{course.name}}</h4>
+                         </b>
+                         
+                         <p class="card-text">
+                              Save: <b>
+                                   {{course.discount}}%
+                              </b>
+                              <br>
+                              <span class="fs-5">
+                                   Price: <del>{{course.price|dollar}}</del>
+                                   &nbsp;
+                                   
+                                   <span>{% course_sell_price course.price course.discount as value %} {{value|dollar}}  </span>
+                              </span>
+                              
+                         </p>
+
+
+
+                         <div class="row mt-3 ">
+                              <div class="col ">
+                                   <a class="btn btn-primary btn-block" href="">Enroll Now</a>
+                              </div>
+                              <div class="col">
+                                   <a class="btn btn-info btn-block" href="">Show More</a>
+                              </div>
+                         </div>
+
+
+                    </div>
+               </div>
+          </div>
+
+          {% endfor %}
+
+
+     </div>
+
+
+
+
+</div>
+{% endblock content %}
