@@ -3,7 +3,7 @@ from django.utils.text import slugify
 # from taggit.managers import TaggableManager# Create your models here.
 
 class Course(models.Model):
-    name = models.CharField(max_length = 50 , null = False)
+    name = models.CharField(max_length = 50 , null = False,unique = True)
     slug = models.CharField(max_length = 50 , null = False , unique = True)
     description = models.CharField(max_length = 500 , null = True)
     price = models.IntegerField(null=False)
@@ -21,6 +21,8 @@ class Course(models.Model):
          if self.slug:
               self.slug = slugify(self.name)
          return super().save(*args, **kwargs)
+     
+     
 class CourseProperty(models.Model):
     description  = models.CharField(max_length = 100 , null = False)
     course = models.ForeignKey(Course , null = False , on_delete=models.CASCADE)
@@ -46,7 +48,7 @@ class Video(models.Model):
     title  = models.CharField(max_length = 100 , null = False)
     video_description = models.CharField(max_length = 500 , null = True)
     course = models.ForeignKey(Course , null = False , on_delete=models.CASCADE)
-    serial_number = models.IntegerField(null=False)
+    serial_number = models.IntegerField(null=False,unique=True)
     video_id = models.CharField(max_length = 100 , null = False)
     is_preview = models.BooleanField(default = False)
 

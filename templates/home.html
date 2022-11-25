@@ -5,7 +5,7 @@
      <div class="row mt-5">
           {% for course in courses %}
 
-          <div class="col mx-auto">
+          <div class="col mx-auto mb-3">
                <div class="card mx-auto" style="width: 18rem;">
                     <img src="{{course.thumbnail.url}}" class="card-img-top"
                          alt="...">
@@ -35,7 +35,7 @@
                                    <a class="btn btn-primary btn-block" href="">Enroll Now</a>
                               </div>
                               <div class="col">
-                                   <a class="btn btn-info btn-block" href="">Show More</a>
+                                   <a class="btn btn-info btn-block" href="{% url 'courseDetail' course.slug %}">Show More</a>
                               </div>
                          </div>
 

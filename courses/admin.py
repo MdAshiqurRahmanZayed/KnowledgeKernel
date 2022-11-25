@@ -9,6 +9,7 @@ class TagAdmin(admin.TabularInline):
 
 class VideoAdmin(admin.TabularInline):
     model = Video
+    extra = 0
     list_display = ("is_preview")
 
 class LearningAdmin(admin.TabularInline):
