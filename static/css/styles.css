@@ -1,5 +1,82 @@
 a {
    text-decoration: none;
-     
+
 }
 
+#section {
+   background-color: aqua;
+   color: black;
+}
+
+
+
+/* content collapse */
+/* General design */
+
+.wrapper {
+   margin-left: 1rem;
+   border: 1px solid lightgrey;
+   border-radius: 5px;
+}
+
+.content {
+   height: auto;
+   /* here is the starting point */
+   max-height: 1000px;
+   padding: 0;
+   background-color: #f3f3f7;
+   overflow: hidden;
+
+   transition-property: opacity, max-height;
+   transition-duration: 1s, 0.5s;
+}
+
+
+
+.activator {
+   cursor: pointer;
+   padding: .5em;
+   border-bottom: 1px solid lightgrey;
+}
+
+.block {
+   display: block;
+   border: 1px dotted grey;
+   margin: 0.5em;
+   padding: 0.5em;
+   border-radius: 5px;
+}
+
+.active-video {
+   display: block;
+   border: 1px dotted grey;
+   margin: 0.5em;
+   padding: 0.5em;
+   border-radius: 5px;
+   background-color: #0e4737;
+   color: #fff;
+}
+
+
+/* Collapse */
+.wrapper .activator:after {
+   content: "🔻";
+   height: 1em;
+   width: 1em;
+   display: inline-block;
+
+   transition: transform 0.3s linear;
+}
+
+.wrapper.collapsed .activator:after {
+   transform: rotate(-0.25turn);
+}
+
+.wrapper.collapsed .content {
+   max-height: 0;
+   opacity: 0;
+}
+
+.resources{
+   color: #fff;
+}

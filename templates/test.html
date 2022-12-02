@@ -1,0 +1,174 @@
+<style>
+     /* General design */
+     body {
+          font-family: 'sans-serif';
+     }
+
+     .wrapper {
+          margin-left: 1rem;
+          border: 1px solid lightgrey;
+          border-radius: 5px;
+     }
+
+     .content {
+          height: auto;
+          /* here is the starting point */
+          max-height: 1000px;
+          padding: 0;
+          background-color: #f3f3f7;
+          overflow: hidden;
+
+          transition-property: opacity, max-height;
+          transition-duration: 1s, 0.5s;
+     }
+
+     .activator {
+          cursor: pointer;
+          padding: .5em;
+          border-bottom: 1px solid lightgrey;
+     }
+
+     .block {
+          display: block;
+          border: 1px dotted grey;
+          margin: 0.5em;
+          padding: 0.5em;
+          border-radius: 5px;
+     }
+
+
+
+     /* Collapse */
+     .wrapper .activator:after {
+          content: "🔻";
+          height: 1em;
+          width: 1em;
+          display: inline-block;
+
+          transition: transform 0.3s linear;
+     }
+
+     .wrapper.collapsed .activator:after {
+          transform: rotate(-0.25turn);
+     }
+
+     .wrapper.collapsed .content {
+          max-height: 0;
+          opacity: 0;
+     }
+</style>
+
+<h3>Collapse height:auto using css</h3>
+<div class="activator" onclick="toogleSelection('my-scope')">
+     Click to toggle view
+</div>
+<div id="my-scope" class="wrapper collapsed">
+     <div class="content">
+          <div class="block">Some content a</div>
+          <div class="block">Some content b</div>
+          <div class="block">Some content c</div>
+
+     </div>
+</div>
+<div id="my-scope01" class="wrapper collapsed">
+     <div class="activator" onclick="toogleSelection('my-scope01')">
+          Click to toggle view
+     </div>
+     <div class="content">
+          <div class="block">Some content a</div>
+          <div class="block">Some content b</div>
+          <div class="block">Some content c</div>
+
+     </div>
+</div>
+
+
+<button onclick="myfunctionName('John')">Click</button>
+<div class="youtube">
+
+</div>
+<script>
+     function toogleSelection(id) {
+          document.getElementById(id).classList.toggle('collapsed');
+     }
+
+     // Not required
+     function removeElement(element) {
+          element.remove();
+     }
+
+     function myfunctionName(String) {
+          var aa = document.getElementById('youtube');
+          aa.innerHTML ="sdva";
+     }
+</script>
+
+<!DOCTYPE HTML>
+<html>
+
+<head>
+     <title>
+          JavaScript
+          | Pass string parameter in onClick function.
+     </title>
+</head>
+
+<style>
+     .video-container {
+  position: relative;
+  padding-bottom: 56.25%;
+}
+
+.video-container iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+.video {
+  aspect-ratio: 16 / 9;
+  width: 100%;
+}
+
+
+</style>
+<body style="text-align:center;" id="body">
+
+     <p id="GFG_UP" >
+
+     </p>
+     <button onclick="GFG_Fun('8KrLAmuhfkQ'); ">
+          click here
+     </button>
+     <p id="GFG_DOWN">
+     </p>
+     <div class="video-container">
+  <iframe
+    src="https://www.youtube.com/embed/msizPweg3kE"
+    frameborder="0"
+    allow="accelerometer; autoplay; encrypted-media; gyroscope;"
+    allowfullscreen></iframe>
+    <iframe
+  class="video"
+  src="https://www.youtube.com/embed/msizPweg3kE"
+  frameborder="0"
+  allow="accelerometer; autoplay; encrypted-media; gyroscope;"
+  allowfullscreen></iframe>
+
+</div>
+
+     <script>
+
+          var down = document.getElementById('GFG_DOWN');
+
+
+          function GFG_Fun(parameter) {
+               down.innerHTML = '<iframe width="560" height="315" src="https://www.youtube.com/embed/'+parameter+'" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'
+                    
+          }
+          
+     </script>
+</body>
+
+</html>

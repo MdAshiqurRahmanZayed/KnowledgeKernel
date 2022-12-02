@@ -7,13 +7,13 @@
 
           <div class="col mx-auto mb-3">
                <div class="card mx-auto" style="width: 18rem;">
-                    <img src="{{course.thumbnail.url}}" class="card-img-top"
+                    <img style="height:300px;width:360px;" src="{{course.thumbnail.url}}" class="card-img-top"
                          alt="...">
                     <div class="card-body">
                          <b>
                               <h4 class="card-title">{{course.name}}</h4>
                          </b>
-                         
+                         {% comment %} {{course.video_set.all.0.video_unique_id}} {% endcomment %}
                          <p class="card-text">
                               Save: <b>
                                    {{course.discount}}%
@@ -35,7 +35,7 @@
                                    <a class="btn btn-primary btn-block" href="">Enroll Now</a>
                               </div>
                               <div class="col">
-                                   <a class="btn btn-info btn-block" href="{% url 'courseDetail' course.slug %}">Show More</a>
+                                   <a class="btn btn-info btn-block" href="{% url 'courseDetail' course.slug course.video_set.all.0.video_unique_id%}">Show More</a>
                               </div>
                          </div>
 
