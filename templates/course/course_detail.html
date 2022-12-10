@@ -61,13 +61,25 @@
                               {% for video in item.video_set.all  %}
                               {% comment %} {{video.video_id}} {% endcomment %}
                               <div class="content  ">
-                                   <a href="{% url 'courseDetail' course.slug video.video_unique_id  %}">
+                                   {% if video.is_preview  is False %}
+                                   
+                                   
                                         <div
-                                             class="{% if video.video_unique_id ==  video_youtube.video_unique_id %} active-video {% else %} block {% endif %} ">
+                                             class=" {% if video.video_unique_id ==  video_youtube.video_unique_id %} active-video {% else %} block {% endif %} ">
+                                             {{video.serial_number}}.{{video.title}}
+                                        </div>
+
+                                   
+                                   {% else %}
+                                   
+                                    <a href=" {% url 'courseDetail' course.slug video.video_unique_id  %}">
+                                        <div
+                                             class=" {% if video.video_unique_id ==  video_youtube.video_unique_id %} active-video {% else %} block {% endif %} ">
                                              {{video.serial_number}}.{{video.title}}
                                         </div>
 
                                    </a>
+                                   {% endif %}
                               </div>
                               {% if video.resource  %}
                               <div class="content  ">
@@ -156,6 +168,18 @@
                               </p>
                          </div>
                     </div>
+               </div>
+          </div>
+     </div>
+     <div class="mt-3">
+          <div class="card">
+               <div class="card-body">
+                    <h5 class="card-title"><b>Instructor</b> </h5>
+                    <h4 class="card-text"><b>{{instructor.first_name}} {{instructor.last_name}}</b> </h4>
+                    <h5>{{instructor.profession}}</h5>
+                    <h6>{{instructor.about}}</h6>
+                    <a class='me-3' href="{{instructor.website}}">Website</a>
+                    <a href="{{instructor.linkedin}}">Linkedin</a>
                </div>
           </div>
      </div>

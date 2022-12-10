@@ -28,7 +28,16 @@ function toogleSelection(id) {
      document.getElementById(id).classList.toggle('collapsed');
 }
 
+// jquery end
+
+setTimeout(function () {
+     $('#message').fadeOut('slow')
+}, 4000)
+
+
+
 // Not required
 function removeElement(element) {
      element.remove();
 }
+

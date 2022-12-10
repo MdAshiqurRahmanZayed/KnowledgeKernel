@@ -1,10 +1,11 @@
 import email
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+from django.contrib.auth.models import Group
 
 # Create your models here.
 class MyAccountManager(BaseUserManager):
-     def create_user(self,first_name,last_name,username,email,password=None):
+     def create_user(self,username,email,password=None):
           if not email:
                raise ValueError('User must have an email address')
 
@@ -14,8 +15,8 @@ class MyAccountManager(BaseUserManager):
           user = self.model(
                email      = self.normalize_email(email),
                username   = username,
-               first_name = first_name,
-               last_name  = last_name,
+               # first_name = first_name,
+               # last_name  = last_name,
           )
           
           user.set_password(password)
@@ -56,6 +57,9 @@ class Account(AbstractBaseUser):
     is_student    = models.BooleanField(default=False)
     is_instructor    = models.BooleanField(default=False)
     
+    #group
+    
+    
     USERNAME_FIELD= 'email'
     REQUIRED_FIELDS= ['username','first_name','last_name']
     
@@ -90,3 +94,21 @@ class Account(AbstractBaseUser):
 
 #     def full_address(self):
 #         return f'{self.address_line_1} {self.address_line_2}'
+class UserProfile(models.Model):
+    user = models.OneToOneField(Account, on_delete=models.CASCADE)
+    first_name      = models.CharField(max_length=50)
+    last_name       = models.CharField(max_length=50)
+    profession       = models.CharField(max_length=50)
+    website         = models.CharField(max_length=50)
+    linkedin         = models.CharField(blank=True,null=True, max_length=50)
+    about           = models.TextField()
+    phone_number    = models.CharField(max_length=50)
+    profile_picture = models.ImageField(blank=True,null=True, upload_to='images/profile',default='images/man.png')
+    address_line_1  = models.CharField(blank=True, max_length=100)
+    address_line_2  = models.CharField(blank=True, max_length=100)
+    city = models.CharField(blank=True, max_length=20)
+    state = models.CharField(blank=True, max_length=20)
+    country = models.CharField(blank=True, max_length=20)
+
+    def __str__(self):
+        return self.user.username

@@ -1,10 +1,12 @@
 from django.db import models
 from django.utils.text import slugify
 from taggit.managers import TaggableManager
+from accounts.models import UserProfile,Account
 import uuid
 # from taggit.managers import TaggableManager# Create your models here.
 
 class Course(models.Model):
+    instructor = models.ForeignKey(UserProfile,on_delete=models.CASCADE) 
     name = models.CharField(max_length = 50 , null = False,unique = True)
     slug = models.CharField(max_length = 50 , null = False , unique = True)
     description = models.CharField(max_length = 500 , null = True)
