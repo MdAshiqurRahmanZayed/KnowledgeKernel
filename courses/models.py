@@ -26,7 +26,7 @@ class Course(models.Model):
    
     def save(self,*args, **kwargs):
          if self.slug:
-              self.slug = slugify(self.name)
+              self.slug = slugify(self.name ,allow_unicode=True)
          return super().save(*args, **kwargs)
      
      

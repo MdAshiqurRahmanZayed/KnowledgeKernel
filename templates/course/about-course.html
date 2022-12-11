@@ -1,0 +1,127 @@
+{% extends 'base.html' %}
+{% load course_custom_tags %}
+
+{% block title %}
+{{course.name}}
+{% endblock title %}
+
+{% block content %}
+
+<div class="container">
+     <h1><b> {{course.name}} </b> </h1>
+     <div class="row">
+          <div class="col-md-9">
+               <img src="{{course.thumbnail.url}}" alt="">
+               <h3>
+                    <b>About Course:</b><br>
+                    {{course.description}}
+               </h3>
+               <div class="col">
+                    <ul id='video_list' class="list-group overflow-scroll">
+
+                         {% for item in sections %}
+                         {% comment %} {{video_youtube.section_video}} {% endcomment %}
+                         <div id="my-scope-{{item}}" class=" wrapper 
+                         {% if video_youtube.section_video == item %}
+                         
+                         {% else %}
+                         collapsed 
+                         {% endif %}
+                         ">
+                              <div class="activator" onclick="toogleSelection('my-scope-{{item}}')">
+                                   {{item}}
+                              </div>
+                              {% for video in item.video_set.all  %}
+                              {% comment %} {{video.video_id}} {% endcomment %}
+                              <div class="content  ">
+                                   {% if video.is_preview  is False %}
+
+
+                                   <div
+                                        class=" {% if video.video_unique_id ==  video_youtube.video_unique_id %} active-video {% else %} block {% endif %} ">
+                                        {{video.serial_number}}.{{video.title}}
+                                   </div>
+
+
+                                   {% else %}
+
+                                   <a href=" {% url 'courseDetail' course.slug video.video_unique_id  %}">
+                                        <div
+                                             class=" {% if video.video_unique_id ==  video_youtube.video_unique_id %} active-video {% else %} block {% endif %} ">
+                                             {{video.serial_number}}.{{video.title}}
+                                        </div>
+
+                                   </a>
+                                   {% endif %}
+                              </div>
+                              {% if video.resource  %}
+                              <div class="content  ">
+                                   <div
+                                        class="{% if video.serial_number ==  video_youtube.serial_number %} active-video {% else %} block {% endif %} ">
+                                        <a class="nav-link dropdown-toggle" href="#" role="button"
+                                             data-bs-toggle="dropdown" aria-expanded="false">
+                                             Download Resources
+                                        </a>
+
+                                        <ul class="dropdown-menu">
+                                             <li>
+                                                  <a class="dropdown-item" target="_blank" href="{{video.resource}}">
+
+                                                       {% if video.resource_title %}
+
+                                                       {{video.resource_title}}
+
+                                                       {% else %}
+                                                       Resources
+                                                       {% endif %}
+
+                                                  </a>
+                                             </li>
+
+                                        </ul>
+                                   </div>
+
+                              </div>
+                              {% endif %}
+                              {% endfor %}
+                         </div>
+                         {% endfor %}
+
+
+
+
+                         {% comment %} {% for  video in videos %}
+                         <a href="?lecture={{video.serial_number}}">
+                              <li class="list-group-item {% if video == video_youtube %} active {% endif %} "
+                                   aria-current="true">
+                                   {{video.serial_number}}.{{video.title}}
+                              </li>
+                         </a>
+                         {% endfor %} {% endcomment %}
+                    </ul>
+
+
+               </div>
+          </div>
+          <div class="col-md-3">
+               <h4><b>This course includes:</b></h4>
+               <h5>Price: {{course.price}} </h5>
+               <h5>Discount: {{course.discount}} </h5>
+               <h5>Tags: <ul>
+
+                         {% for tag in course.tags.all %}
+
+                         <li>
+                              {{tag}}
+                         </li>
+                         {% endfor %}
+
+                    </ul>
+               </h5>
+
+          </div>
+
+     </div>
+</div>
+
+{% endblock %}

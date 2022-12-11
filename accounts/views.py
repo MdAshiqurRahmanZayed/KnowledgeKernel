@@ -93,7 +93,7 @@ def create_profile(request):
                messages.success(request, 'Your profile has been created successfully.')
                return redirect('edit_profile')
      else:
-          profile_form = UserCreateProfileForm(request.POST or None)
+          profile_form = UserCreateProfileForm()
      context = {
           'profile_form':profile_form
      }
