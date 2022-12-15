@@ -1,0 +1,17 @@
+<aside class="col-md-3">
+     <!--   SIDEBAR   -->
+       <ul class="list-group">
+    <a class="list-group-item {% if '/update-course/' in request.path %} active {% endif %}" href="{% url 'updateCourse' course.slug %}"> Update Course </a>
+    <a class="list-group-item {% if '/create-section/' in request.path %} active {% endif %}" href="{% url 'create_section' course.slug %}"> Create Section </a>
+    <a class="list-group-item {% if '/all-section/' in request.path %} active {% endif %}" href="{% url 'allSectionCourse' course.slug  %}"> All Section </a>
+    {% comment %} <a class="list-group-item {% if '' in request.path %} active {% endif %}" href=""> Delete Section </a>
+    <a class="list-group-item {% if '' in request.path %} active {% endif %}" href=""> Create Video </a>
+    <a class="list-group-item {% if '' in request.path %} active {% endif %}" href=""> Update Video </a>
+    <a class="list-group-item {% if '' in request.path %} active {% endif %}" href=""> Delete Video </a>
+    <a class="list-group-item {% if '' in request.path %} active {% endif %}" href=""> Delete Course </a> {% endcomment %}
+  </ul>
+     <br>
+     {% comment %} <a class="btn btn-danger btn-block mb-3" href="{% url 'logout' %}"> <i class="fa fa-power-off"></i> <span
+               class="text">Logout</span> </a> {% endcomment %}
+     <!--   SIDEBAR .//END   -->
+</aside>

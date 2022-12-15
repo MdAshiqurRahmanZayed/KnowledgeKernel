@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load course_custom_tags %}
+{% block title %}
+Delete Section
+{% endblock title %}
+{% block content %}
+
+<!-- ========================= SECTION CONTENT ========================= -->
+<section class="section-conten padding-y bg mb-3">
+     {% include 'includes/alerts.html' %}
+     <div class="container mt-2">
+          <div class="row">
+                    {% include 'includes/dashboard_sidebar_course.html' %}
+                    
+               <main class="col-md-9">
+                    <article class="card">
+
+                         <header class="card-header">
+                              <strong class="d-inline-block mr-3">
+                                   Delete Section : {{section}}
+
+                              </strong>
+                         </header>
+                         <div class="container  ">
+
+                              <br>
+                              <h2>Do you want to delete <b class="text-danger">{{section}}</b> Section </h2>
+                              <br>
+                              <form method="post">
+                                   {% csrf_token %}
+                                   <button type="submit" class="btn btn-danger mb-3">Delete</button>
+
+                              </form>
+                         </div>
+                    </article> <!-- order-group.// -->
+               </main>
+          </div> <!-- row.// -->
+     </div>
+
+
+</section>
+
+
+
+{% endblock %}

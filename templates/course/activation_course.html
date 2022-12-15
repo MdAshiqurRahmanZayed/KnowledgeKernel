@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load course_custom_tags %}
+
+{% block title %}
+{{course}}
+{% endblock title %}
+
+{% block content %}
+
+
+
+<section class="section-conten padding-y bg">
+     {% include 'includes/alerts.html' %}
+     <div class="container mt-2">
+          <div class="row">
+               {% include 'includes/dashboard_sidebar.html' %}
+               <main class="col-md-9">
+                    <article class="card">
+                         <div class="form-check">
+                              <label class="form-check-label" for="flexCheckDefault">
+
+                                   <h3><b>{{course}}</b> </h3>
+                              </label>
+                              <br>
+
+                              {% if course.activae %}
+                              <h5>Your Course is Active</h5>
+                              {% else %}
+                              <h5>Your Course is Deactive</h5>
+                              {% endif %}
+                              <form class="my-4" action="{% url 'activationCourse' course.slug %}"
+                                    method="POST">
+                                   {% csrf_token %}
+                                   <label class="form-check-label" for="flexCheckDefault">
+                                        Activation:
+                                   </label>
+                                   <div class="form-check">
+
+                                        {{form.active}}
+                                   </div>
+                                   <br>
+                                   <input class="btn btn-success bottom" type="submit" value="Submit">
+
+                              </form>
+                         </div>
+
+
+                    </article> <!-- order-group.// -->
+               </main>
+          </div> <!-- row.// -->
+     </div>
+
+
+</section>
+
+{% endblock %}

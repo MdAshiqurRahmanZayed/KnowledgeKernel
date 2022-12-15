@@ -1,34 +1,135 @@
 {% extends 'base.html' %}
 {% load course_custom_tags %}
-
 {% block title %}
-Create Course
-{% endblock title %}
+{% if 'create-course' in request.path %}
 
+Create Course
+{% else %}
+Update course
+{% endif %}
+{% endblock title %}
 {% block content %}
 
 <!-- ========================= SECTION CONTENT ========================= -->
-<section class="section-conten padding-y bg">
+<section class="section-conten padding-y bg mb-3">
      {% include 'includes/alerts.html' %}
      <div class="container mt-2">
           <div class="row">
+               {% if 'create-course' in request.path %}
                {% include 'includes/dashboard_sidebar.html' %}
+               {% else %}
+               {% include 'includes/dashboard_sidebar_course.html' %}
+               {% endif %}
                <main class="col-md-9">
                     <article class="card">
 
-                         <div class="container my-4">
-                              <h2>Create Course</h2>
-                              <form action="{% url 'create_course' %}" method="POST" enctype="multipart/form-data">
+                         <header class="card-header">
+                              <strong class="d-inline-block mr-3">
+                                   {% if 'create-course' in request.path %}
+
+                                   Create Course
+                                   {% else %}
+                                   Update course:{{course.name}}
+                                   {% endif %}
+                              </strong>
+                         </header>
+                         <div class="container form-background ">
+
+                              <form class="" method="POST" enctype="multipart/form-data">
                                    {% csrf_token %}
-                                   {{form.as_p}}
-                                   <button type="submit" class="btn btn-primary">Create Course</button>
+
+                                   <div class="p-3">
+
+                                        <h4><b>Your Course Name</b> </h4>
+                                        {{form.name}}
+                                   </div>
+                                   <div class="p-3">
+                                        <h4><b>Description</b> </h4>
+                                        {{form.description}}
+                                   </div>
+
+                                   <div class="p-3">
+                                        <div class="row">
+                                             <div class="col-md-6">
+
+                                                  <h4><b>Price</b> </h4>
+                                                  {{form.price}}
+                                             </div>
+                                             <div class="col-md-6">
+
+                                                  <h4><b>Discount</b> </h4>
+                                                  {{form.discount}}
+                                             </div>
+
+                                        </div>
+                                   </div>
+                                   <div class="p-3">
+                                        <div class="row ">
+                                             <div class="col-md-6">
+
+                                                  <h4><b>Course Thumbnail </b> </h4>
+                                                  {{form.thumbnail}}
+                                             </div>
+                                             <div class="col-md-6">
+
+                                                  <h4><b>Resource </b> </h4>
+                                                  {{form.resource}}
+                                             </div>
+
+                                        </div>
+                                   </div>
+
+
+
+
+
+                                   <div class="p-3">
+                                        <h4><b>Length </b>
+                                             <h6>(Hours)</h6>
+                                        </h4>
+                                        {{form.length}}
+                                   </div>
+
+                                   <div class="p-3">
+                                        <h4><b>Tags</b> </h4>
+                                        <a href="">
+                                             <h6><a href="">Show all tags</a></h6>
+                                        </a>
+                                        {{form.tags}}
+                                   </div>
+
+                                   <div class="p-3">
+                                        <h4><b>Prerequisite </b> </h4>
+                                        {{form.prerequisite}}
+                                   </div>
+
+                                   <div class="p-3">
+                                        <h4><b>Learning </b> </h4>
+                                        {{form.learning}}
+                                   </div>
+                                   <div class="p-3">
+                                        <div class="">
+
+                                             <h4 class="d-inline"><b>Active Course </b>
+                                                  <h6 class="d-inline">(Default False)</h6>
+                                             </h4>
+                                        </div>
+                                        {{form.active}}
+                                   </div>
+
+                                   {% comment %} {{form.as_p}} {% endcomment %}
+                                   {% comment %} <input type="checkbox" name="active" class="form-check-input" required
+                                        id="id_active"> {% endcomment %}
+
+                                   {% if 'create-course' in request.path %}
+
+                                   <button type="submit" class="btn btn-primary mb-3">Create Course</button>
+                                   {% else %}
+                                   <button type="submit" class="btn btn-primary mb-3">Update Course</button>
+                                   {% endif %}
                               </form>
 
                          </div>
-
-
-
-
                     </article> <!-- order-group.// -->
                </main>
           </div> <!-- row.// -->

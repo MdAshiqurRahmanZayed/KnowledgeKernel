@@ -1,11 +1,12 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,get_object_or_404
 from django.http import HttpResponse
 from .models import Course,Video,SectionVideo 
 from accounts.models import UserProfile
 from django.contrib.auth.decorators import login_required
-from .forms import CourseCreateForm
+from .forms import CourseCreateForm,CourseActivation,SectionForm
 from taggit.models import Tag 
 from django.utils.text import slugify
+from django.contrib import messages,auth
 
 # Create your views here.
 
@@ -17,6 +18,18 @@ def homepage(request):
      return render(request,"home.html",context)
 
 @login_required(login_url='login')
+def myCreatedCourse(request):
+     createdCourse = Course.objects.filter(instructor = request.user.userprofile).count()
+     courses = Course.objects.filter(instructor = request.user.userprofile).order_by('-date')
+     context = {
+          "createdCourse":createdCourse,
+          "courses":courses
+     }
+     
+     return render(request,'course/my_courses.html',context)
+
+# Course
+@login_required(login_url='login')
 def createCourse(request):
      if request.method == "POST":
           form = CourseCreateForm(request.POST,request.FILES)
@@ -25,18 +38,167 @@ def createCourse(request):
           if form.is_valid():
                course = form.save(commit=False)
                course.instructor = user 
-               data= form.cleaned_data.get("name")
-               print(data)
+               data = form.cleaned_data.get("name")
                course.slug = slugify(data, allow_unicode=True)
                form.save() 
-               return redirect('dashboard')
+               messages.success(request, 'Your Course has been Created.')
+               
+               return redirect('myCreatedCourse')
           
      else:
-          form = CourseCreateForm()
+          form = CourseCreateForm(request.POST or None)
      context = {
          'form':form ,
      }
      return render(request,'course/create-course.html',context)
+
+
+@login_required(login_url='login')
+def updateCourse(request,slug):
+     course = get_object_or_404(Course,slug = slug ,instructor=request.user.userprofile)
+     if request.method == "POST":
+          form = CourseCreateForm(request.POST,request.FILES ,instance = course)          
+          if form.is_valid():
+               course = form.save(commit=False)
+               data = form.cleaned_data.get("name")
+               course.slug = slugify(data, allow_unicode=True)
+               messages.success(request, 'Your Course has been Updated Successfully.')
+               
+               form.save() 
+               return redirect('myCreatedCourse')
+          
+     else:
+          form = CourseCreateForm(instance = course )
+          
+     context = {
+         'form':form ,
+         'course':course
+     }
+     return render(request,'course/create-course.html',context)
+
+
+
+# section
+@login_required(login_url='login')
+def CreateSectionCourse(request,slug):
+     course = Course.objects.get(slug=slug)
+     print(course)
+     if request.method == "POST":
+          form = SectionForm(request.POST)
+          try:
+               if form.is_valid():
+                    section_name = form.cleaned_data.get("name")
+                    section_slug = slugify(section_name ,allow_unicode=True)    
+                    section = form.save(commit=False)
+                    
+                    section.course = course
+                    section.slug = section_slug
+                    print(section_slug)
+                    section.save()                 
+                    messages.success(request, 'Your Section has been Created Successfully.')
+                    return redirect('allSectionCourse',slug)
+          except:
+               return redirect('create_section')
+     else:
+          form = SectionForm()
+     context = {
+          "course": course,
+          "form" :form
+     }
+     return render(request,'course/section-form.html',context)
+
+@login_required(login_url='login')
+def allSectionCourse(request,slug):
+     course = Course.objects.get(slug=slug)
+     sections = SectionVideo.objects.filter(course__slug = slug).order_by('serial_number')
+     count = SectionVideo.objects.filter(course__slug = slug).count()
+
+     context = {
+          "sections": sections,
+          "course":course,
+          "count":count,
+     }
+     return render(request,'course/course-section.html',context)
+
+
+@login_required(login_url='login')
+def updateSection(request,slug,section_slug,pk):
+     course = Course.objects.get(slug=slug)
+     data = SectionVideo.objects.get(course = course  , course__instructor = request.user.userprofile,  slug = section_slug,id=pk)
+     if request.method == "POST":
+          form = SectionForm(request.POST, instance = data)
+          try:
+               if form.is_valid():
+                    section = form.save(commit=False)
+                    data = form.cleaned_data.get("name")
+                    section.slug = slugify(data, allow_unicode=True)
+                    
+                    messages.success(request, 'Your Section has been Updated Successfully.')
+                    section.save() 
+                    return redirect('allSectionCourse',slug)
+          except:
+               pass   
+          
+     else:
+          form = SectionForm(instance = data)
+     
+     context = {
+          "course":course,
+          "form": form
+     }
+     return render(request,'course/section-form.html',context)
+
+@login_required(login_url='login')
+def deleteSection(request,slug,section_slug,pk):
+     course = Course.objects.get(slug=slug)
+     section = SectionVideo.objects.get(course__slug = slug,course__instructor = request.user.userprofile,slug= section_slug,id=pk)
+     if request.method == "POST":
+          section.delete()
+          return redirect('allSectionCourse',slug)
+     context = {
+          "course":course,
+          "section":section,
+          # "form": form
+     }
+     return render(request,'course/delete-section.html',context)
+
+
+
+# def UpdateSectionCourse(request,slug,section_slug):
+#      course = Course.objects.get(slug=slug)
+#      print(course)
+#      if request.method == "POST":
+#           form = SectionForm(request.POST ,instance=course)
+#           try:
+#                if form.is_valid():
+#                     section_name = form.cleaned_data.get("name")
+#                     section_new_slug = slugify(section_name ,allow_unicode=True)    
+#                     section = form.save(commit=False)
+                    
+#                     section.course = course
+#                     section.slug = section_new_slug
+#                     print(section_new_slug)
+#                     section.save()                 
+#                     return redirect('home')
+#           except:
+#                return redirect('create_section')
+#      else:
+#           form = SectionForm(instance=course)
+#      context = {
+#           "course": course,
+#           "form" :form
+#      }
+#      return render(request,'course/section-form.html',context)
+
+
+
+
+
+
+
+
+
+
 
 def aboutCourse(request,slug):
      course = Course.objects.get(slug=slug)

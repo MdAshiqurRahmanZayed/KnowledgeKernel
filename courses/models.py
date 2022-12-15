@@ -9,16 +9,16 @@ class Course(models.Model):
     instructor = models.ForeignKey(UserProfile,on_delete=models.CASCADE) 
     name = models.CharField(max_length = 50 , null = False,unique = True)
     slug = models.CharField(max_length = 50 , null = False , unique = True)
-    description = models.CharField(max_length = 500 , null = True)
-    price = models.IntegerField(null=False)
+    description = models.CharField(max_length = 700 , null = True)
+    price = models.IntegerField(null=False,default=0)
     discount = models.IntegerField(null=False , default = 0) 
     active = models.BooleanField(default = False)
-    thumbnail = models.ImageField(upload_to = "course/thumbnail") 
+    thumbnail = models.ImageField( upload_to = "course/thumbnail") 
     date = models.DateTimeField(auto_now_add= True) 
     resource = models.FileField(upload_to = "course/resource",null=True,blank=True)
-    length = models.IntegerField(null=False)
+    length = models.IntegerField(null=False,default=0)
     tags = TaggableManager()
-    prerequisite = models.CharField(max_length = 50 , null = False)
+    prerequisite = models.CharField(max_length = 50 , null = True, blank=True,default="No need ")
     learning = models.CharField(max_length = 50 , null = False)
 
     def __str__(self):
@@ -50,6 +50,7 @@ class SectionVideo(models.Model):
     course = models.ForeignKey(Course , null = False , on_delete=models.CASCADE)
     name = models.CharField(max_length = 50 , null = False)
     slug = models.CharField(max_length = 50 , null = False )
+    serial_number = models.IntegerField(null=False)
     
     def save(self,*args, **kwargs):
          if self.slug:
