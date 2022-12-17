@@ -1,7 +1,6 @@
 import email
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
-from django.contrib.auth.models import Group
 
 # Create your models here.
 class MyAccountManager(BaseUserManager):
@@ -15,20 +14,18 @@ class MyAccountManager(BaseUserManager):
           user = self.model(
                email      = self.normalize_email(email),
                username   = username,
-               # first_name = first_name,
-               # last_name  = last_name,
+               
           )
           
           user.set_password(password)
           user.save(using=self._db)
           return user
-     def create_superuser(self,first_name,last_name,username,email,password):
+     def create_superuser(self,username,email,password):
           user = self.create_user(
                email      = self.normalize_email(email),
                username   = username,
                password   = password,
-               first_name = first_name,
-               last_name  = last_name,
+               
           )
           user.is_admin      = True
           user.is_active     = True
@@ -36,8 +33,7 @@ class MyAccountManager(BaseUserManager):
           user.is_superadmin = True
           user.save(using=self._db)
           return user
-          
-
+      
 
 
 class Account(AbstractBaseUser):
@@ -59,9 +55,8 @@ class Account(AbstractBaseUser):
     
     #group
     
-    
     USERNAME_FIELD= 'email'
-    REQUIRED_FIELDS= ['username','first_name','last_name']
+    REQUIRED_FIELDS= ['username']
     
     objects = MyAccountManager()
     
@@ -79,7 +74,7 @@ class Account(AbstractBaseUser):
     def has_module_perms(self,add_label):
          return True
    
-    
+   
 # class UserProfile(models.Model):
 #     user = models.OneToOneField(Account, on_delete=models.CASCADE)
 #     address_line_1 = models.CharField(blank=True, max_length=100)
