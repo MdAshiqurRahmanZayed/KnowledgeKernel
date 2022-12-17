@@ -3,7 +3,25 @@
        <ul class="list-group">
     <a class="list-group-item {% if '/update-course/' in request.path %} active {% endif %}" href="{% url 'updateCourse' course.slug %}"> Update Course </a>
     <a class="list-group-item {% if '/create-section/' in request.path %} active {% endif %}" href="{% url 'create_section' course.slug %}"> Create Section </a>
-    <a class="list-group-item {% if '/all-section/' in request.path %} active {% endif %}" href="{% url 'allSectionCourse' course.slug  %}"> All Section </a>
+    <a class="list-group-item {% if '/all-section/' in request.path %} active {% elif '/update-section/' in request.path  %} active  {% elif '/delete-section/' in request.path  %} bg-danger {% endif %}" href="{% url 'allSectionCourse' course.slug  %}"> All Sections 
+    {% if 'update-section' in request.path %}
+      - Update
+      {% elif 'delete-section' in request.path %}
+      - Delete
+    {% endif %}
+      </a>
+
+
+    <a class="list-group-item {% if '/create-video/' in request.path %} active {% endif %}" href="{% url 'createSectionVideo' course.slug %}"> Create Video </a>
+
+
+    <a class="list-group-item {% if '/all-section-video/' in request.path %} active {% elif '/update-video/' in request.path  %} active  {% elif '/delete-video/' in request.path  %} bg-danger {% endif %}" href="{% url 'allSectionVideo'  course.slug %}"> All Videos 
+    {% if 'update-video' in request.path %}
+      - Update
+      {% elif 'delete-video' in request.path %}
+      - Delete
+    {% endif %}
+      </a>
     {% comment %} <a class="list-group-item {% if '' in request.path %} active {% endif %}" href=""> Delete Section </a>
     <a class="list-group-item {% if '' in request.path %} active {% endif %}" href=""> Create Video </a>
     <a class="list-group-item {% if '' in request.path %} active {% endif %}" href=""> Update Video </a>

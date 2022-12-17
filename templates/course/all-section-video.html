@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+{% load course_custom_tags %}
+
+{% block title %}
+All Video
+{% endblock title %}
+
+{% block content %}
+
+<!-- ========================= SECTION CONTENT ========================= -->
+<section class="section-conten padding-y bg mb-3">
+
+     <div class="container mt-2">
+          {% include 'includes/alerts.html' %}
+          <div class="row">
+               {% include 'includes/dashboard_sidebar_course.html' %}
+               <main class="col-md-9">
+                    <article class="card">
+
+                         <header class="card-header">
+                              <strong class="d-inline-block mr-3">
+                                   All Video
+                              </strong>
+                         </header>
+                         <div class="card-body">
+                              <div class="row">
+                                   <div class="col-md-12">
+                                        <div class="card" style="text-align:center">
+                                             <div class="card-body">
+                                                  <h5 class="card-title">
+                                                       Total Video : <b>{{count}}</b>
+                                                  </h5>
+
+                                             </div>
+
+                                        </div>
+                                        <div class="mt-4">
+
+
+                                             <ul id='video_list' class="list-group">
+
+
+
+                                                  {% for section in sections %}
+                                                  <div id="my-scope-{{section.slug}}" class=" wrapper collapsed">
+                                                       <div class="activator"
+                                                            onclick=" toogleSelection('my-scope-{{section.slug}}')">
+                                                            {{section}}
+                                                       </div>
+                                                       {% comment %} {{video.video_id}} {% endcomment %}
+
+
+                                                       {% for video in section.video_set.all  %}
+
+                                                       <div class="content float-left ">
+                                                            <div class=" block ">
+                                                                 {{video.serial_number}} : {{video.title}} 
+                                                                 
+                                                                      {% if video.is_preview %}
+                                                                          <p>(have preview)</p> 
+                                                                      {% endif %}
+                                                                 
+                                                                 <div class=" container  mt-2">
+
+                                                                      <a href="{% url 'update_video' course.slug section.slug video.video_unique_id   %}">
+                                                                           <button class="btn btn-primary">Edit</button>
+                                                                      </a>
+                                                                      <a href="{% url 'delete_video' course.slug section.slug video.video_unique_id   %}">
+                                                                           <button class="btn btn-danger">Delete</button>
+                                                                      </a>
+                                                                      
+                                                                      
+                                                                 </div>
+                                                            </div>
+                                                       </div>
+
+
+                                                       {% endfor %}
+                                                  </div>
+
+                                             </ul>
+                                        </div>
+
+
+                                        {% endfor %}
+
+                                        </ul>
+
+
+                                   </div>
+
+
+                              </div>
+
+                         </div> <!-- row.// -->
+          </div> <!-- card-body .// -->
+
+
+
+          </article> <!-- order-group.// -->
+          </main>
+     </div> <!-- row.// -->
+     </div>
+
+
+</section>
+{% endblock %}

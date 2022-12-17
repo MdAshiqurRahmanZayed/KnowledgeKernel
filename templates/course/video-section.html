@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+{% load course_custom_tags %}
+
+{% block title %}
+Create Video
+{% endblock title %}
+
+{% block content %}
+
+<!-- ========================= SECTION CONTENT ========================= -->
+<section class="section-conten padding-y bg mb-3">
+     
+     <div class="container mt-2">
+          {% include 'includes/alerts.html' %}
+          <div class="row">
+               {% include 'includes/dashboard_sidebar_course.html' %}
+               <main class="col-md-9">
+                    <article class="card">
+
+                         <header class="card-header">
+                              <strong class="d-inline-block mr-3">
+                                   Create Video
+                              </strong>
+                         </header>
+                         <div class="card-body">
+                              <div class="row">
+                                   <div class="col-md-12">
+                                        <div class="card" style="text-align:center">
+                                             <div class="card-body">
+                                                  <h5 class="card-title">
+                                                       Total Video : <b>{{count}} </b>
+                                                  </h5>
+
+                                             </div>
+
+                                        </div>
+
+                                        <div class="card mt-5">
+                                             <div class="card-body">
+                                                  
+                                                  <table class="table">
+                                                       <thead>
+                                                            <tr>
+
+                                                                 <th scope="col">Serial No</th>
+                                                                 <th scope="col">Section Name</th>
+
+                                                            </tr>
+                                                       </thead>
+                                                       <tbody>
+                                                            {% for section in sections %}
+                                                            <tr>
+                                                                 
+                                                                      
+                                                                 <td >{{section.serial_number}}</td>
+
+                                                                 <td>
+                                                                      <a href="{% url 'create_video' course.slug section.slug section.id %}">
+
+                                                                           {{section}}
+                                                                      </a>
+                                                                 </td>
+                                                                 
+                                                                 
+                                                                 
+                                                                 
+                                                            </tr>
+                                                            {% endfor %}
+                                                            
+                                                       </tbody>
+                                                  </table>
+                                                  
+
+                                             </div>
+                                        </div>
+                                   </div>
+
+                              </div> <!-- row.// -->
+                         </div> <!-- card-body .// -->
+
+
+
+                    </article> <!-- order-group.// -->
+               </main>
+          </div> <!-- row.// -->
+     </div>
+
+
+</section>
+{% endblock %}

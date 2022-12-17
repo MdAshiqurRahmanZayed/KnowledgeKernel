@@ -33,7 +33,7 @@ class CourseVideoAdmin(admin.TabularInline):
 class CourseAdmin(admin.ModelAdmin):
     inlines = [ SectionVideoAdmin ,CourseVideoAdmin]
     prepopulated_fields = {"slug": ("name",)}  # new
-    list_display = ("name","price","discount","active",)
+    list_display = ("name","price","discount","active", "instructor")
     
 class SectionVideoAdminModel(admin.ModelAdmin):
     list_display = ["name","course"] 
