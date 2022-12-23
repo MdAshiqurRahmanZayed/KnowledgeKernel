@@ -56,27 +56,15 @@ Assessment:{{course.name}}
                                                   <td>
                                                        {{assessment.maximum_number}}
                                                   </td>
-                                                  <td>
-                                                       {% if assessment.submittedassessment_set.all %}
 
-                                                       {% comment %} {{assessment.submittedassessment_set.all.0.id}}
-                                                       {% endcomment %}
 
+                                                  
+                                                   <td>
                                                        <a
-                                                            href="{% url 'updateAssessment' course.slug assessment.submittedassessment_set.all.0.id %}">
+                                                            href="{% url 'submitOrUpdateAssessmentUser' course.slug assessment.id  request.user.id %}">
 
-                                                            <div class="btn btn-info">Update your Answer</div>
+                                                            <div class="btn btn-outline-primary"> Create/Update Answer</div>
                                                        </a>
-
-                                                       {% else %}
-
-                                                       <a href="{% url 'submitAssessment' course.slug assessment.id %}">
-
-                                                            <div class="btn btn-primary">Submit your Answer</div>
-                                                       </a>
-                                                       {% endif %}
-
-
                                                   </td>
 
 
@@ -125,12 +113,12 @@ Assessment:{{course.name}}
                                                        {{mark.assessment.title}}
                                                   </td>
                                                   <td>
-                                                            {{mark.obtained_mark}}
+                                                       {{mark.obtained_mark}}
                                                   </td>
                                                   <td>
                                                        {{mark.feedback}}
                                                   </td>
-                                                  
+
                                              </tr>
                                              {% endfor %}
 
@@ -144,7 +132,7 @@ Assessment:{{course.name}}
 
                          </div>
                     </article> <!-- order-group.// -->
-                    
+
                </main>
           </div> <!-- row.// -->
      </div>

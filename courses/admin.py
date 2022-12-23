@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Course,Video,SectionVideo,Assessment,SubmittedAssessment,Mark
+from .models import Course,Video,SectionVideo,Assessment,SubmittedAssessment,Mark,EnrolledCourse
 # Register your models here.
 
 
@@ -74,6 +74,11 @@ class MarkAdmin(admin.ModelAdmin):
     search_fields = ['assessment']
  
     
+class EnrolledAdmin(admin.ModelAdmin):
+    list_display = ('user','course')
+    search_fields = ['user']
+ 
+    
 
 
 
@@ -83,3 +88,4 @@ admin.site.register(SectionVideo,SectionVideoAdminModel)
 admin.site.register(Assessment,AssessmentAdmin)
 admin.site.register(SubmittedAssessment,SubmittedAssessmentAdmin)
 admin.site.register(Mark,MarkAdmin)
+admin.site.register(EnrolledCourse,EnrolledAdmin)

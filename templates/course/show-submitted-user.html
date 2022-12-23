@@ -53,8 +53,8 @@ Mark Assessment
                                                             <tr>      
                                                                       
                                                                  <td ><b>
-                                                                      <a href="{% url 'showAllSubmittedAssessmentDetail' course.slug user.submittedassessment_set.all.0.student_user.id %}">
-                                                                           {{user.submittedassessment_set.all.0}}
+                                                                      <a href="{% url 'showAllSubmittedAssessmentDetail' course.slug user.user.id %}">
+                                                                           {{user.user}} 
                                                                       </a>
                                                                  
                                                                  </b></td> 
