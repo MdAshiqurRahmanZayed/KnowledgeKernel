@@ -27,13 +27,14 @@ urlpatterns = [
      #Assessment
      path('all-assessment/<str:slug>/',allAssessment,name="allAssessment"),
      path('create-assessment/<str:slug>/',createAssessment,name="createAssessment"),
-     path('update-assessment/course:<str:slug>/<int:pk>',updateAssessment,name="updateAssessment"),
-     path('delete-assessment/course:<str:slug>/<int:pk>',deleteAssessment,name="deleteAssessment"),
+     path('update-assessment/course:<str:slug>/<int:pk>/',updateAssessment,name="updateAssessment"),
+     path('delete-assessment/course:<str:slug>/<int:pk>/',deleteAssessment,name="deleteAssessment"),
      
      #Show Assessment
      path('assessment-course/<str:slug>/',showAllAssessment,name="showAllAssessment"),
      path('assessment-course/<str:slug>/assessment/<int:pk>/',submitAssessment,name="submitAssessment"),
-     path('update-assessment-course/<str:slug>/assessment/<int:pk>/',updateAssessment,name="updateAssessment"),
+     path('update-assessment-course/<str:slug>/assessment/<int:pk>/student-user/<int:student_user>/',updateAssessmentUser,name="updateAssessmentUser"),
+     path('create-or-update-assessment-course/<str:slug>/assessment/<int:pk>/student-user/<int:student_user>/',submitOrUpdateAssessmentUser,name="submitOrUpdateAssessmentUser"),
      
      #marks
      path('submitted-user-course/<str:slug>/',showAllSubmittedAssessmentUser,name="showAllSubmittedAssessmentUser"),

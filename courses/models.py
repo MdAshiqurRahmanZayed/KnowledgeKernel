@@ -88,7 +88,17 @@ class Video(models.Model):
     def __str__(self):
         return f'course name: ({self.section_video.course}) --> section name: ({self.section_video}) --> video-title: {self.title}' 
 
-    
+
+class EnrolledCourse(models.Model):
+     user = models.ForeignKey(Account, on_delete=models.CASCADE)
+     course = models.ForeignKey(Course, on_delete=models.CASCADE)
+     enrolled = models.BooleanField(default=True)
+     created_at = models.DateTimeField(  auto_now_add=True)
+     
+     def __str__(self):
+          return f'{self.user} course:{self.course} '
+     
+
     
 # Assessment
 class Assessment(models.Model):
@@ -106,7 +116,7 @@ class Assessment(models.Model):
 
 class SubmittedAssessment(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
-    student_user = models.ForeignKey(Account, on_delete=models.CASCADE)
+    student_user = models.ForeignKey(EnrolledCourse, on_delete=models.CASCADE)
     assessment = models.ForeignKey(Assessment, on_delete=models.CASCADE)
     resource = models.CharField( max_length=200,null=False,blank=False)
     resource_title = models.CharField(max_length=100,null=False,blank=False)
@@ -129,4 +139,5 @@ class Mark(models.Model):
     
     # def __str__(self):
     #     return self.assessment
+     
      

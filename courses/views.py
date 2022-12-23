@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect,get_object_or_404
 from django.http import HttpResponse
-from .models import Course,Video,SectionVideo,Assessment,SubmittedAssessment
+from .models import Course,Video,SectionVideo,Assessment,SubmittedAssessment,EnrolledCourse
 from accounts.models import UserProfile
 from django.contrib.auth.decorators import login_required
 from .forms import CourseCreateForm,SectionForm,VideoForm,AssessmentForm,SubmittedAssessmentForm,MarkForm
@@ -48,6 +48,7 @@ def courseDetail(request,slug,video_unique_id):
      instructor = UserProfile.objects.get( user__id = course.instructor.user.id )
      sections = SectionVideo.objects.filter( course__slug = slug )
      count = Assessment.objects.filter(course__slug = slug).count()
+     enrolled = EnrolledCourse.objects.filter(  course__slug = slug,user = request.user).exists()
 
      
      # videos = Video.objects.filter(course__slug = slug).order_by("serial_number")
@@ -72,6 +73,7 @@ def courseDetail(request,slug,video_unique_id):
           'count':count,
           'video_youtube':video_youtube,
           'instructor':instructor,
+          'enrolled':enrolled,
      }
      return render(request,'course/course_detail.html',context)
 
@@ -386,27 +388,6 @@ def updateAssessment(request,slug,pk):
 
 
 
-@login_required(login_url='login')
-def updateAssessment(request,slug,pk):
-     course = Course.objects.get(slug=slug)
-     assessment = Assessment.objects.get(id = pk)
-     if request.method == "POST":
-          form = AssessmentForm(request.POST ,instance = assessment)
-          try:
-               if form.is_valid():
-                    form.save()
-                    messages.success(request, 'Your Assessment has been Updated successfully.')
-                    return redirect('allAssessment' ,slug)
-          except:
-               messages.danger(request, 'Your Assessment has not been Updated.')
-               return redirect('allAssessment',slug)
-     else:
-          form = AssessmentForm(instance = assessment)
-     context = {
-          "course": course,
-          "form" :form
-     }
-     return render(request,'course/assessment-form.html',context)
 
 
 
@@ -427,25 +408,31 @@ def deleteAssessment(request,slug,pk):
 
 
 #show Assessment
+@login_required(login_url='login')
 def showAllAssessment(request,slug):
      course = Course.objects.get(slug=slug)
      assessment = Assessment.objects.filter(course = course)
-     marks = SubmittedAssessment.objects.filter(course = course,student_user=request.user)
+     submitted_assessments = SubmittedAssessment.objects.filter(course = course )
+     marks = SubmittedAssessment.objects.filter(course = course,student_user__user=request.user)
      
      context = {
           "course" : course,
           "assessment" : assessment,
           "marks" : marks,
+          "submitted_assessments" : submitted_assessments,
      }
      return render(request,'course/show-all-assessment.html',context)
 
+
+@login_required(login_url='login')
 def submitAssessment(request,slug,pk):
      course = Course.objects.get(slug=slug)
      assessment = Assessment.objects.get(id = pk)
+     student_user = EnrolledCourse.objects.get(user = request.user)
      if request.method =="POST":
           form = SubmittedAssessmentForm(request.POST)
           submitted_answer = form.save(commit=False)
-          submitted_answer.student_user = request.user
+          submitted_answer.student_user = student_user
           submitted_answer.assessment = assessment 
           submitted_answer.course = course 
           submitted_answer.save()
@@ -460,14 +447,15 @@ def submitAssessment(request,slug,pk):
      }
      return render(request,'course/submit-assessment.html',context)
 
-
-def updateAssessment(request,slug,pk):
+@login_required(login_url='login')
+def updateAssessmentUser(request,slug,pk,student_user):
      course = Course.objects.get(slug = slug)
-     submitted_assessment = SubmittedAssessment.objects.get( id = pk)
-     print(submitted_assessment)
+     assessment = Assessment.objects.get(id = pk)
+     submitted_assessment = SubmittedAssessment.objects.get( course = course,assessment = assessment,student_user__user__id = student_user )
      if request.method == "POST":
           form = SubmittedAssessmentForm(request.POST,instance = submitted_assessment)
           form.save()
+          messages.success(request, 'Your Answer has been Updated Successfully.')
           return redirect('showAllAssessment',slug)
      else:
           form = SubmittedAssessmentForm( instance = submitted_assessment)
@@ -478,14 +466,50 @@ def updateAssessment(request,slug,pk):
      return render(request,'course/submit-assessment.html',context) 
 
 
+@login_required(login_url='login')
+def submitOrUpdateAssessmentUser(request,slug,pk,student_user):
+     course = Course.objects.get(slug=slug)
+     assessment = Assessment.objects.get(id = pk)
+     
+     try:
+          submitted_assessment = SubmittedAssessment.objects.get( course = course,assessment = assessment,student_user__user__id = student_user )
+          if request.method == "POST":
+               form = SubmittedAssessmentForm(request.POST,instance = submitted_assessment)
+               form.save()
+               messages.success(request, 'Your Answer has been Updated Successfully.')
+               return redirect('showAllAssessment',slug)
+          else:
+               form = SubmittedAssessmentForm( instance = submitted_assessment)
+     except:
+          student = EnrolledCourse.objects.get(user = request.user)
+          if request.method =="POST":
+               form = SubmittedAssessmentForm(request.POST)
+               submitted_answer = form.save(commit=False)
+               submitted_answer.student_user = student
+               submitted_answer.assessment = assessment 
+               submitted_answer.course = course 
+               submitted_answer.save()
+               messages.success(request, 'Your Answer has been stored Successfully.')
+               return redirect('showAllAssessment',slug)
+          else:
+               form = SubmittedAssessmentForm()
+          
+     context = {
+          "course" : course,
+          "assessment" : assessment,
+          "form" : form,
+     }
+     return render(request,'course/submit-assessment.html',context)
+     
+
+
 
 #mark Assessment
 
 def showAllSubmittedAssessmentUser(request,slug):
      course = Course.objects.get(slug = slug)
      count = SubmittedAssessment.objects.filter(course__slug = slug ).count()
-     users = Account.objects.all()
-     
+     users = EnrolledCourse.objects.filter(course__slug = slug)
      
      
      context = {
@@ -499,8 +523,8 @@ def showAllSubmittedAssessmentUser(request,slug):
 
 def showAllSubmittedAssessmentDetail(request,slug,student_user):
      course = Course.objects.get(slug = slug)
-     submitted_assesments = SubmittedAssessment.objects.filter(course__slug = slug , student_user = student_user  ).order_by('assessment')
-     count = SubmittedAssessment.objects.filter(course__slug = slug , student_user = student_user  ).count()
+     submitted_assesments = SubmittedAssessment.objects.filter(course__slug = slug ,student_user__user__id=student_user  ).order_by('assessment')
+     count = SubmittedAssessment.objects.filter(course__slug = slug, student_user__user__id=student_user ).count()
 
      context = {
           "course" : course,
