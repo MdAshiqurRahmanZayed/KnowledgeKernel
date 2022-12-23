@@ -23,19 +23,30 @@
                                    
                          </header>
                          <div class="card-body">
-                              <div class="row">
-                                   <div class="col-md-6">
+                              <div class="row ">
+                                   <div class="col-md-6 mb-3">
                                         <div class="card" style="text-align:center">
                                              <div class="card-body">
                                                   <h5 class="card-title">
                                                        Total Enrolled Course
                                                   </h5>
-                                                  <h4>{{orders_count}}</h4>
+                                                  <h4>{{enrolled_course}}</h4>
                                                   {% comment %} <a href="{% url 'my_orders' %}">View Orders</a> {% endcomment %}
                                              </div>
                                         </div>
                                    </div>
-                                   <div class="col-md-6">
+                                   <div class="col-md-6 mb-3">
+                                        <div class="card" style="text-align:center">
+                                             <div class="card-body">
+                                                  <h5 class="card-title">
+                                                       Total Created Course
+                                                  </h5>
+                                                  <h4>{{createdCourse}}</h4>
+                                                  {% comment %} <a href="{% url 'my_orders' %}">View Orders</a> {% endcomment %}
+                                             </div>
+                                        </div>
+                                   </div>
+                                   <div class="col-md-12">
                                         <div class="card" style="text-align:center">
                                              <div class="card-body">
                                                   {% comment %} <img src="{{userprofile.profile_picture.url}}" alt="User Profile Picture" class="mb-3" height="50" width="50" style = "border-radius:50%"> {% endcomment %}
@@ -49,7 +60,7 @@
                                                   {% endif %}
 
                                                   <p class="mb-0">{{user.email}}</p>
-                                                  <p>{{userprofile.phone_number}}</p>
+                                                  <p>{{userprofile.first_name}} {{userprofile.last_name}}</p>
                                              </div>
                                         </div>
                                    </div>

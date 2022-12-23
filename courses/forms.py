@@ -1,5 +1,5 @@
 from django import forms
-from .models import Course,SectionVideo,Video
+from .models import Course,SectionVideo,Video,Assessment,SubmittedAssessment,Mark
 from taggit.models import Tag 
 
 class CourseCreateForm(forms.ModelForm):
@@ -63,3 +63,37 @@ class VideoForm(forms.ModelForm):
           self.fields['video_id'].widget.attrs['class'] = 'form-control'
           self.fields['is_preview'].widget.attrs['class'] = 'form-check-input'
 
+class AssessmentForm(forms.ModelForm):
+   class Meta:
+      model = Assessment
+      fields = ['title','resource','resource_title','maximum_number']
+   def __init__(self, *args, **kwargs):
+         super(AssessmentForm, self).__init__(*args, **kwargs)
+         self.fields['title'].widget.attrs['class'] = 'form-control'
+       
+         self.fields['resource'].widget.attrs['class'] = 'form-control'
+         self.fields['resource_title'].widget.attrs['class'] = 'form-control'
+         self.fields['maximum_number'].widget.attrs['class'] = 'form-control'
+         
+         
+class SubmittedAssessmentForm(forms.ModelForm):
+   class Meta:
+      model = SubmittedAssessment
+      fields = ['resource','resource_title']
+   def __init__(self, *args, **kwargs):
+         super(SubmittedAssessmentForm, self).__init__(*args, **kwargs)       
+         self.fields['resource'].widget.attrs['class'] = 'form-control'
+         self.fields['resource'].widget.attrs['placeholder'] = 'Resource link'
+         self.fields['resource_title'].widget.attrs['class'] = 'form-control'
+         
+         
+class MarkForm(forms.ModelForm):
+   class Meta:
+      model = SubmittedAssessment
+      fields = ['obtained_mark','feedback']
+      # fields = ['obtained_mark','feedback']
+   def __init__(self, *args, **kwargs):
+         super(MarkForm, self).__init__(*args, **kwargs)       
+         self.fields['obtained_mark'].widget.attrs['class'] = 'form-control'
+         self.fields['feedback'].widget.attrs['class'] = 'form-control'
+   

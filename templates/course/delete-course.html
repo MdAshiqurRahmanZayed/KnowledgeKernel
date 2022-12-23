@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load course_custom_tags %}
 {% block title %}
-Delete Video
+Delete Course
 {% endblock title %}
 {% block content %}
 
@@ -15,17 +15,18 @@ Delete Video
                <main class="col-md-9">
                     <article class="card">
 
-                         <header class="card-header">
+                         <header class="card-header bg-danger">
                               <strong class="d-inline-block mr-3">
-                                   
-                                   Delete Video : {{video.title}}
+                                   Delete Course : {{course}}
 
                               </strong>
                          </header>
                          <div class="container  ">
 
                               <br>
-                              <h2>Do you want to delete <b class="text-danger">{{video.title}}</b> Video </h2>
+                              <h2>Do you want to delete <br>
+                                   Course: <b class="text-danger">{{course}}</b>
+                                    </h2>
                               <br>
                               <form method="post">
                                    {% csrf_token %}

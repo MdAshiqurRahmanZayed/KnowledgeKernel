@@ -5,6 +5,7 @@ from django.contrib.auth.decorators  import login_required
 from .forms import RegistrationForm,UserProfileForm,UserCreateProfileForm
 from .models import Account,UserProfile
 from django.contrib import messages
+from courses.models import Course
 # Create your views here.
 
 #register
@@ -66,12 +67,20 @@ def logout(request):
 
 @login_required(login_url='login')
 def dashboard(request):
-     if UserProfile.objects.filter(user = request.user).exists():
+     
+     if UserProfile.objects.filter(user__id = request.user.id).exists():
           userprofile = UserProfile.objects.get(user = request.user)
+          createdCourse = Course.objects.filter(instructor = userprofile).count()
+          enrolled_course = "0"
      else:
           userprofile = "Please Complete Your Profile"
+          createdCourse = "0"
+          enrolled_course = "0"
+          
      context = {
-          'userprofile':userprofile
+          'userprofile':userprofile,
+          'createdCourse':createdCourse,
+          'enrolled_course':enrolled_course,
      } 
      
      return render(request,'accounts/dashboard.html',context)

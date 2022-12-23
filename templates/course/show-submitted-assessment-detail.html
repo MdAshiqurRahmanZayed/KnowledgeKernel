@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+{% load course_custom_tags %}
+
+{% block title %}
+Mark Assessment
+{% endblock title %}
+
+{% block content %}
+
+<!-- ========================= SECTION CONTENT ========================= -->
+<section class="section-conten padding-y bg mb-3">
+     
+     <div class="container mt-2">
+          {% include 'includes/alerts.html' %}
+          <div class="row">
+               {% include 'includes/dashboard_sidebar_course.html' %}
+               <main class="col-md-9">
+                    <article class="card">
+
+                         <header class="card-header">
+                              <strong class="d-inline-block mr-3">
+                                   Mark Assessment
+                              </strong>
+                         </header>
+                         <div class="card-body">
+                              <div class="row">
+                                   <div class="col-md-12">
+                                        <div class="card" style="text-align:center">
+                                             <div class="card-body">
+                                                  <h5 class="card-title">
+                                                       Total Submitted Answer : <b>{{count}}</b>
+                                                  </h5>
+
+                                             </div>
+
+                                        </div>
+
+                                        <div class="card mt-5">
+                                             <div class="card-body">
+                                                  
+                                                  <table class="table">
+                                                       <thead>
+                                                            <tr>
+
+                                                                 {% comment %} <th scope="col">Serial No</th> {% endcomment %}
+                                                                 <th scope="col">Submitted Assessment</th>
+                                                                 <th scope="col">Mark</th>
+                                                                 
+
+                                                            </tr>
+                                                       </thead>
+                                                       <tbody>
+                                                            {% for submitted_assesment in submitted_assesments %}
+                                                            <tr>      
+                                                                      
+                                                                 <td >
+                                                                      <a href="{{submitted_assesment.resource}}"> 
+                                                                           {{submitted_assesment.resource_title}}
+                                                                      </a>
+
+                                                                 </td> 
+                                                                 <td>
+                                                                      {% comment %} {{submitted_assesment.assessment.id}}
+                                                                      {{submitted_assesment.student_user.id}}
+                                                                      {{submitted_assesment.id}} {% endcomment %}
+                                                                      {% if submitted_assesment.obtained_mark == 0 %}
+                                                                      
+                                                                      <a href="{% url 'markAssessment' course.slug submitted_assesment.assessment.id submitted_assesment.id submitted_assesment.student_user.id  %}">
+                                                                           <div class="btn btn-primary">Mark</div>
+                                                                      </a>
+                                                                      {% else %}
+
+                                                                      <a href="{% url 'markAssessment' course.slug submitted_assesment.assessment.id submitted_assesment.id submitted_assesment.student_user.id  %}">
+                                                                           <div class="btn btn-info">Update</div>
+                                                                      </a>
+                                                                      {% endif %}
+                                                                      
+
+
+                                                                 </td> 
+                                                            </tr>
+                                                            {% endfor %}
+                                                            
+                                                       </tbody>
+                                                  </table>
+                                                 
+
+                                             </div>
+                                        </div>
+                                        
+                                   </div>
+
+                              </div> <!-- row.// -->
+                         </div> <!-- card-body .// -->
+
+
+
+                    </article> <!-- order-group.// -->
+               </main>
+          </div> <!-- row.// -->
+     </div>
+
+
+</section>
+{% endblock %}

@@ -1,0 +1,155 @@
+{% extends 'base.html' %}
+{% load course_custom_tags %}
+
+{% block title %}
+Assessment:{{course.name}}
+{% endblock title %}
+
+
+
+
+{% block content %}
+<!-- ========================= SECTION CONTENT ========================= -->
+<section class="section-conten padding-y bg mb-3">
+     {% include 'includes/alerts.html' %}
+     <div class="container mt-2">
+          <div class="row">
+
+
+
+               <main class="col-md-12">
+                    <article class="card">
+
+                         <header class="card-header">
+                              <strong class="d-inline-block mr-3">
+                                   Assessment:{{course.name}}
+                              </strong>
+                         </header>
+                         <div class="container">
+                              <div class="card-body">
+
+                                   <table class="table">
+                                        <thead>
+                                             <tr>
+
+                                                  <th scope="col">Title</th>
+                                                  <th scope="col">Resource</th>
+                                                  <th scope="col">Maximum Number</th>
+                                                  <th scope="col">Submit your answer</th>
+
+
+                                             </tr>
+                                        </thead>
+                                        <tbody>
+                                             {% for assessment in assessment %}
+                                             <tr>
+
+
+                                                  <td>
+                                                       {{assessment.title}}
+                                                  </td>
+                                                  <td>
+                                                       <a href="{{assessment.resource}}">
+                                                            {{assessment.resource_title}}
+                                                       </a>
+                                                  </td>
+                                                  <td>
+                                                       {{assessment.maximum_number}}
+                                                  </td>
+                                                  <td>
+                                                       {% if assessment.submittedassessment_set.all %}
+
+                                                       {% comment %} {{assessment.submittedassessment_set.all.0.id}}
+                                                       {% endcomment %}
+
+                                                       <a
+                                                            href="{% url 'updateAssessment' course.slug assessment.submittedassessment_set.all.0.id %}">
+
+                                                            <div class="btn btn-info">Update your Answer</div>
+                                                       </a>
+
+                                                       {% else %}
+
+                                                       <a href="{% url 'submitAssessment' course.slug assessment.id %}">
+
+                                                            <div class="btn btn-primary">Submit your Answer</div>
+                                                       </a>
+                                                       {% endif %}
+
+
+                                                  </td>
+
+
+
+
+                                             </tr>
+                                             {% endfor %}
+
+                                        </tbody>
+                                   </table>
+
+
+
+
+                              </div>
+
+                         </div>
+                    </article> <!-- order-group.// -->
+                    <article class="card mt-2">
+
+                         <header class="card-header">
+                              <strong class="d-inline-block mr-3">
+                                   Marking:{{course.name}}
+                              </strong>
+                         </header>
+                         <div class="container">
+                              <div class="card-body">
+
+                                   <table class="table">
+                                        <thead>
+                                             <tr>
+
+                                                  <th scope="col">Assessment</th>
+                                                  <th scope="col">Obtained mark:</th>
+                                                  <th scope="col">Feedback:</th>
+
+
+                                             </tr>
+                                        </thead>
+                                        <tbody>
+                                             {% for mark in marks %}
+                                             <tr>
+
+
+                                                  <td>
+                                                       {{mark.assessment.title}}
+                                                  </td>
+                                                  <td>
+                                                            {{mark.obtained_mark}}
+                                                  </td>
+                                                  <td>
+                                                       {{mark.feedback}}
+                                                  </td>
+                                                  
+                                             </tr>
+                                             {% endfor %}
+
+                                        </tbody>
+                                   </table>
+
+
+
+
+                              </div>
+
+                         </div>
+                    </article> <!-- order-group.// -->
+                    
+               </main>
+          </div> <!-- row.// -->
+     </div>
+
+
+</section>
+
+{% endblock %}

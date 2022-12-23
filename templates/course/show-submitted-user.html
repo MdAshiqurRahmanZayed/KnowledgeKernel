@@ -2,7 +2,7 @@
 {% load course_custom_tags %}
 
 {% block title %}
-My Course
+Mark Assessment
 {% endblock title %}
 
 {% block content %}
@@ -13,13 +13,13 @@ My Course
      <div class="container mt-2">
           {% include 'includes/alerts.html' %}
           <div class="row">
-               {% include 'includes/dashboard_sidebar.html' %}
+               {% include 'includes/dashboard_sidebar_course.html' %}
                <main class="col-md-9">
                     <article class="card">
 
                          <header class="card-header">
                               <strong class="d-inline-block mr-3">
-                                   My Courses
+                                   Mark Assessment
                               </strong>
                          </header>
                          <div class="card-body">
@@ -28,7 +28,7 @@ My Course
                                         <div class="card" style="text-align:center">
                                              <div class="card-body">
                                                   <h5 class="card-title">
-                                                       Total Created Course : <b>{{createdCourse}}</b>
+                                                       Total Submitted : <b>{{count}}</b>
                                                   </h5>
 
                                              </div>
@@ -42,26 +42,22 @@ My Course
                                                        <thead>
                                                             <tr>
 
-                                                                 <th scope="col">Name of the courses:</th>
+                                                                 {% comment %} <th scope="col">Serial No</th> {% endcomment %}
+                                                                 <th scope="col">Name</th>
                                                                  
 
                                                             </tr>
                                                        </thead>
                                                        <tbody>
-                                                            {% for course in courses %}
-                                                            <tr>
-                                                                 
+                                                            {% for user in users %}
+                                                            <tr>      
                                                                       
-                                                                 <td>
-                                                                      <a href="{% url 'updateCourse' course.slug %}">
-
-                                                                           {{course}}
+                                                                 <td ><b>
+                                                                      <a href="{% url 'showAllSubmittedAssessmentDetail' course.slug user.submittedassessment_set.all.0.student_user.id %}">
+                                                                           {{user.submittedassessment_set.all.0}}
                                                                       </a>
                                                                  
-                                                                 </td>
-                                                                 
-                                                                
-                                                                 
+                                                                 </b></td> 
                                                             </tr>
                                                             {% endfor %}
                                                             

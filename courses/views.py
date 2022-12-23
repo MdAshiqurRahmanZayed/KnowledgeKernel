@@ -1,13 +1,13 @@
 from django.shortcuts import render,redirect,get_object_or_404
 from django.http import HttpResponse
-from .models import Course,Video,SectionVideo 
+from .models import Course,Video,SectionVideo,Assessment,SubmittedAssessment
 from accounts.models import UserProfile
 from django.contrib.auth.decorators import login_required
-from .forms import CourseCreateForm,SectionForm,VideoForm
+from .forms import CourseCreateForm,SectionForm,VideoForm,AssessmentForm,SubmittedAssessmentForm,MarkForm
 from taggit.models import Tag 
 from django.utils.text import slugify
 from django.contrib import messages,auth
-
+from accounts.models import *
 # Create your views here.
 
 def homepage(request):
@@ -20,7 +20,7 @@ def homepage(request):
 @login_required(login_url='login')
 def myCreatedCourse(request):
      createdCourse = Course.objects.filter(instructor = request.user.userprofile).count()
-     courses = Course.objects.filter(instructor = request.user.userprofile).order_by('-date')
+     courses = Course.objects.filter(instructor = request.user.userprofile).order_by('-created_at')
      context = {
           "createdCourse":createdCourse,
           "courses":courses
@@ -28,7 +28,58 @@ def myCreatedCourse(request):
      
      return render(request,'course/my_courses.html',context)
 
-# Course
+
+
+
+#course
+
+def aboutCourse(request,slug):
+     course = Course.objects.get(slug=slug)
+     sections = SectionVideo.objects.filter( course__slug = slug )
+     context = {
+          "course":course,
+          "sections":sections,
+     }
+     return render(request,'course/about-course.html',context)
+
+
+def courseDetail(request,slug,video_unique_id):
+     course = Course.objects.get( slug = slug )
+     instructor = UserProfile.objects.get( user__id = course.instructor.user.id )
+     sections = SectionVideo.objects.filter( course__slug = slug )
+     count = Assessment.objects.filter(course__slug = slug).count()
+
+     
+     # videos = Video.objects.filter(course__slug = slug).order_by("serial_number")
+     # tags = Tag.objects.filter(course__slug = slug)
+     # prerequisites = Prerequisite.objects.filter(course__slug = slug)
+     # learnings = Learning.objects.filter(course__slug = slug)
+     
+     #serial number
+     serial_number = request.GET.get('lecture')
+     if serial_number is None:
+          serial_number = 1
+     video_youtube = Video.objects.get(section_video__course__slug = slug,video_unique_id = video_unique_id  )
+     # user_profile  = UserProfile.objects.get(user=user)
+     if request.user.is_authenticated is False and video_youtube.is_preview is False:
+          return redirect('login')
+     
+     
+     
+     context = {
+          'course':course,
+          'sections':sections,
+          'count':count,
+          'video_youtube':video_youtube,
+          'instructor':instructor,
+     }
+     return render(request,'course/course_detail.html',context)
+
+
+
+
+
+# Course CRUD
 @login_required(login_url='login')
 def createCourse(request):
      if request.method == "POST":
@@ -81,9 +132,25 @@ def updateCourse(request,slug):
      }
      return render(request,'course/create-course.html',context)
 
+def deleteCourse(request,slug):
+     course = Course.objects.get(slug=slug)
+     if request.method == "POST":
+          try:
+               course.delete()
+               messages.info(request,'Your Course has been deleted successfully.')
+               return redirect('dashboard')
+          except:
+               messages.info(request,'Please try again')
+               return redirect('dashboard')
+          
+     
+     context = {
+          "course":course
+     }
+     return render(request,'course/delete-course.html',context)
 
 
-# section
+# section CRUD
 @login_required(login_url='login')
 def CreateSectionCourse(request,slug):
      course = Course.objects.get(slug=slug)
@@ -168,7 +235,7 @@ def deleteSection(request,slug,section_slug,pk):
 
 
 
-#Video
+# Video CRUD
 @login_required(login_url='login')
 def createSectionVideo(request,slug):
      course = Course.objects.get(slug=slug)
@@ -210,7 +277,7 @@ def createVideo(request,slug,section_slug,pk):
                course_video.course = course
                course_video.save()
                messages.success(request, 'Your video has been Created.')
-               return redirect('createSectionVideo' ,slug)
+               return redirect('allSectionVideo' ,slug)
      else:
           form = VideoForm()
      context = {
@@ -245,64 +312,226 @@ def updateVideo(request,slug,section_slug,video_unique_id):
 @login_required(login_url='login')
 def deleteVideo(request,slug,section_slug,video_unique_id):
      course = Course.objects.get(slug=slug)
-     video = Video.objects.get(course__slug = slug,video_unique_id = video_unique_id )
+     delete = Video.objects.get(course__slug = slug,video_unique_id = video_unique_id )
      if request.method == "POST":
           messages.success(request, 'Your Video has been Deleted Successfully.')
-          video.delete()
+          delete.delete()
           return redirect('allSectionVideo' ,slug)
 
      context = {
           "course":course,
-          "video":video,
+          "delete":delete,
      }
-     return render(request,'course/delete-video.html',context)
+     return render(request,'course/delete-verify.html',context)
 
 
-
-
-
-
-
-def aboutCourse(request,slug):
+# Assessment CRUD
+@login_required(login_url='login')
+def allAssessment(request,slug):
      course = Course.objects.get(slug=slug)
-     sections = SectionVideo.objects.filter( course__slug = slug )
+     assessments = Assessment.objects.filter( course__slug = slug ).order_by('-created_at')
+     count = Assessment.objects.filter(course__slug = slug).count()
      context = {
           "course":course,
-          "sections":sections,
+          "assessments":assessments,
+          "count":count,
      }
-     return render(request,'course/about-course.html',context)
+     return render(request,'course/all-assessment.html',context)
 
 
-def courseDetail(request,slug,video_unique_id):
-     course = Course.objects.get( slug = slug )
-     instructor = UserProfile.objects.get( user__id = course.instructor.user.id )
-     sections = SectionVideo.objects.filter( course__slug = slug )
+@login_required(login_url='login')
+def createAssessment(request,slug):
+     course = Course.objects.get(slug=slug)
+     if request.method == "POST":
+          form = AssessmentForm(request.POST)
+          try:
+               if form.is_valid():
+                    assessment = form.save(commit=False)
+                    assessment.course = course
+                    assessment.save()
+                    messages.success(request, 'Your Assessment has been Created successfully.')
+                    return redirect('allAssessment' ,slug)
+          except:
+               messages.danger(request, 'Your Assessment has not been Created.')
+               return redirect('allAssessment',slug)
+     else:
+          form = AssessmentForm()
+     context = {
+          "course": course,
+          "form" :form
+     }
+     return render(request,'course/assessment-form.html',context)
+
+@login_required(login_url='login')
+def updateAssessment(request,slug,pk):
+     course = Course.objects.get(slug=slug)
+     assessment = Assessment.objects.get(id = pk)
+     if request.method == "POST":
+          form = AssessmentForm(request.POST ,instance = assessment)
+          try:
+               if form.is_valid():
+                    form.save()
+                    messages.success(request, 'Your Assessment has been Updated successfully.')
+                    return redirect('allAssessment' ,slug)
+          except:
+               messages.danger(request, 'Your Assessment has not been Updated.')
+               return redirect('allAssessment',slug)
+     else:
+          form = AssessmentForm(instance = assessment)
+     context = {
+          "course": course,
+          "form" :form
+     }
+     return render(request,'course/assessment-form.html',context)
+
+
+
+@login_required(login_url='login')
+def updateAssessment(request,slug,pk):
+     course = Course.objects.get(slug=slug)
+     assessment = Assessment.objects.get(id = pk)
+     if request.method == "POST":
+          form = AssessmentForm(request.POST ,instance = assessment)
+          try:
+               if form.is_valid():
+                    form.save()
+                    messages.success(request, 'Your Assessment has been Updated successfully.')
+                    return redirect('allAssessment' ,slug)
+          except:
+               messages.danger(request, 'Your Assessment has not been Updated.')
+               return redirect('allAssessment',slug)
+     else:
+          form = AssessmentForm(instance = assessment)
+     context = {
+          "course": course,
+          "form" :form
+     }
+     return render(request,'course/assessment-form.html',context)
+
+
+
+@login_required(login_url='login')
+def deleteAssessment(request,slug,pk):
+     course = Course.objects.get(slug=slug)
+     delete = Assessment.objects.get(id = pk)
+     if request.method == "POST":
+          messages.success(request, 'Your Assessment has been Deleted Successfully.')
+          delete.delete()
+          return redirect('allAssessment' ,slug)
+
+     context = {
+          "course":course,
+          "delete":delete,
+     }
+     return render(request,'course/delete-verify.html',context)
+
+
+#show Assessment
+def showAllAssessment(request,slug):
+     course = Course.objects.get(slug=slug)
+     assessment = Assessment.objects.filter(course = course)
+     marks = SubmittedAssessment.objects.filter(course = course,student_user=request.user)
      
-     # videos = Video.objects.filter(course__slug = slug).order_by("serial_number")
-     # tags = Tag.objects.filter(course__slug = slug)
-     # prerequisites = Prerequisite.objects.filter(course__slug = slug)
-     # learnings = Learning.objects.filter(course__slug = slug)
-     
-     #serial number
-     serial_number = request.GET.get('lecture')
-     if serial_number is None:
-          serial_number = 1
-     video_youtube = Video.objects.get(section_video__course__slug = slug,video_unique_id = video_unique_id  )
-     # user_profile  = UserProfile.objects.get(user=user)
-     if request.user.is_authenticated is False and video_youtube.is_preview is False:
-          return redirect('login')
+     context = {
+          "course" : course,
+          "assessment" : assessment,
+          "marks" : marks,
+     }
+     return render(request,'course/show-all-assessment.html',context)
+
+def submitAssessment(request,slug,pk):
+     course = Course.objects.get(slug=slug)
+     assessment = Assessment.objects.get(id = pk)
+     if request.method =="POST":
+          form = SubmittedAssessmentForm(request.POST)
+          submitted_answer = form.save(commit=False)
+          submitted_answer.student_user = request.user
+          submitted_answer.assessment = assessment 
+          submitted_answer.course = course 
+          submitted_answer.save()
+          messages.success(request, 'Your Answer has been stored Successfully.')
+          return redirect('showAllAssessment',slug)
+     else:
+          form = SubmittedAssessmentForm()
+     context = {
+          "course" : course,
+          "assessment" : assessment,
+          "form" : form,
+     }
+     return render(request,'course/submit-assessment.html',context)
+
+
+def updateAssessment(request,slug,pk):
+     course = Course.objects.get(slug = slug)
+     submitted_assessment = SubmittedAssessment.objects.get( id = pk)
+     print(submitted_assessment)
+     if request.method == "POST":
+          form = SubmittedAssessmentForm(request.POST,instance = submitted_assessment)
+          form.save()
+          return redirect('showAllAssessment',slug)
+     else:
+          form = SubmittedAssessmentForm( instance = submitted_assessment)
+     context = {
+          "course" : course,
+          "form" : form,
+     }
+     return render(request,'course/submit-assessment.html',context) 
+
+
+
+#mark Assessment
+
+def showAllSubmittedAssessmentUser(request,slug):
+     course = Course.objects.get(slug = slug)
+     count = SubmittedAssessment.objects.filter(course__slug = slug ).count()
+     users = Account.objects.all()
      
      
      
      context = {
-          'course':course,
-          'sections':sections,
-          # 'videos':videos,
-          # 'tags':tags,
-          # 'prerequisites':prerequisites,
-          # 'learnings':learnings,
-          'video_youtube':video_youtube,
-          'instructor':instructor,
+          "course" : course,
+          "count" : count,
+          "users" : users,
      }
-     return render(request,'course/course_detail.html',context)
 
+     return render(request,'course/show-submitted-user.html',context)
+
+
+def showAllSubmittedAssessmentDetail(request,slug,student_user):
+     course = Course.objects.get(slug = slug)
+     submitted_assesments = SubmittedAssessment.objects.filter(course__slug = slug , student_user = student_user  ).order_by('assessment')
+     count = SubmittedAssessment.objects.filter(course__slug = slug , student_user = student_user  ).count()
+
+     context = {
+          "course" : course,
+          "submitted_assesments" : submitted_assesments,
+          "count" : count,
+     }
+     return render(request,'course/show-submitted-assessment-detail.html',context)
+
+def markAssessment(request,slug,assessment_pk,submitted_pk,student_user):
+     course = Course.objects.get(slug = slug)
+     assessment = Assessment.objects.get(id = assessment_pk)
+     submit_ssessment = SubmittedAssessment.objects.get(id = submitted_pk)
+     if request.method =="POST":
+          form = MarkForm(request.POST,instance=submit_ssessment)
+          try:
+               if form.is_valid():
+                    form.save()
+                    messages.success(request, 'Your mark has been stored.')
+                    return redirect('showAllSubmittedAssessmentDetail', slug, student_user)
+               else:
+                    messages.info(request, 'Your mark has not been stored.')
+                    return redirect('showAllSubmittedAssessmentDetail', slug, student_user)
+          except:
+               messages.info(request, 'Your mark has not been stored.')
+               return redirect('showAllSubmittedAssessmentDetail', slug, student_user)
+     else:
+               form = MarkForm(instance=submit_ssessment)
+     
+     context = {
+          'form':form,
+          'course':course,
+          'assessment':assessment,
+     }
+     return render(request,'course/mark.html',context)

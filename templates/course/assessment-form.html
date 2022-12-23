@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% load course_custom_tags %}
+{% block title %}
+{% if 'create-assessment' in request.path %}
+
+Create Assessment
+{% else %}
+Update Assessment
+{% endif %}
+{% endblock title %}
+{% block content %}
+
+<!-- ========================= SECTION CONTENT ========================= -->
+<section class="section-conten padding-y bg mb-3">
+     {% include 'includes/alerts.html' %}
+     <div class="container mt-2">
+          <div class="row">
+                    {% include 'includes/dashboard_sidebar_course.html' %}
+                    
+               <main class="col-md-9">
+                    <article class="card">
+
+                         <header class="card-header">
+                              <strong class="d-inline-block mr-3">
+                                   {% if 'create-assessment' in request.path %}
+
+                                   Create Assessment: {{course.name}}
+                                   {% else %}
+                                   Update Assessment: {{course.name}}
+                                   {% endif %}
+                              </strong>
+                         </header>
+                         <div class="container form-background">
+                              <h4 class="my-3"><b>Create Assessment</b> </h4>
+
+                              <form class="" method="POST" >
+                                   {% csrf_token %}
+                                        {{form.as_p}}
+                                 <br>
+                                   {% comment %} {{form.as_p}} {% endcomment %}
+                                   {% comment %} <input type="checkbox" name="active" class="form-check-input" required
+                                        id="id_active"> {% endcomment %}
+                                   
+                                   {% if 'create-assessment' in request.path %}
+
+                                   <button type="submit" class="btn btn-primary mb-3">Create Assessment</button>
+                                   {% else %}
+                                   <button type="submit" class="btn btn-primary mb-3">Update Assessment</button>
+                                   {% endif %}
+
+                              </form>
+
+                         </div>
+                    </article> <!-- order-group.// -->
+               </main>
+          </div> <!-- row.// -->
+     </div>
+
+
+</section>
+
+
+
+{% endblock %}

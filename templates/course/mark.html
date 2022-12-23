@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% load course_custom_tags %}
+
+{% block title %}
+Mark Assessment
+{% endblock title %}
+
+{% block content %}
+
+<!-- ========================= SECTION CONTENT ========================= -->
+<section class="section-conten padding-y bg mb-3">
+     
+     <div class="container mt-2">
+          {% include 'includes/alerts.html' %}
+          <div class="row">
+               {% include 'includes/dashboard_sidebar_course.html' %}
+               <main class="col-md-9">
+                    <article class="card">
+
+                         <header class="card-header">
+                              <strong class="d-inline-block mr-3">
+                                   Mark Assessment : {{assessment.title}}
+                              </strong>
+                         </header>
+                         <div class="card-body">
+                              <div class="row">
+                                   <div class="col-md-12">
+                                        <div class="card" style="text-align:center">
+                                             <div class="card-body">
+                                                  <h5 class="card-title">
+                                                       Maximum Number : <b>{{assessment.maximum_number}}</b>
+                                                  </h5>
+
+                                             </div>
+
+                                        </div>
+
+                                        <div class="card mt-5">
+                                             <div class="card-body">
+                                                  <form action="" method="POST">
+                                                       {% csrf_token %}
+                                                       {% comment %} {{form.as_p}} {% endcomment %}
+
+                                                       <h5>Obtained Mark</h5>
+                                                       {{form.obtained_mark}}
+                                                       <br>
+                                                       <h5>Feedback</h5>
+                                                       {{form.feedback}}
+                                                       <input type="submit" class="btn btn-primary mt-2" value="Mark">
+                                                  </form>
+                                                  
+                                             </div>
+                                        </div>
+                                   </div>
+
+                              </div> <!-- row.// -->
+                         </div> <!-- card-body .// -->
+
+
+
+                    </article> <!-- order-group.// -->
+               </main>
+          </div> <!-- row.// -->
+     </div>
+
+
+</section>
+{% endblock %}

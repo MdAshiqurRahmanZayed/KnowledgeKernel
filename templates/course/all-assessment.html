@@ -2,7 +2,7 @@
 {% load course_custom_tags %}
 
 {% block title %}
-My Course
+All Assessment
 {% endblock title %}
 
 {% block content %}
@@ -13,13 +13,13 @@ My Course
      <div class="container mt-2">
           {% include 'includes/alerts.html' %}
           <div class="row">
-               {% include 'includes/dashboard_sidebar.html' %}
+               {% include 'includes/dashboard_sidebar_course.html' %}
                <main class="col-md-9">
                     <article class="card">
 
                          <header class="card-header">
                               <strong class="d-inline-block mr-3">
-                                   My Courses
+                                   All Assessment
                               </strong>
                          </header>
                          <div class="card-body">
@@ -28,7 +28,7 @@ My Course
                                         <div class="card" style="text-align:center">
                                              <div class="card-body">
                                                   <h5 class="card-title">
-                                                       Total Created Course : <b>{{createdCourse}}</b>
+                                                       Total Assessment : <b>{{count}}</b>
                                                   </h5>
 
                                              </div>
@@ -42,25 +42,31 @@ My Course
                                                        <thead>
                                                             <tr>
 
-                                                                 <th scope="col">Name of the courses:</th>
-                                                                 
+                                                                 {% comment %} <th scope="col">Serial No</th> {% endcomment %}
+                                                                 <th scope="col">Name</th>
+                                                                 <th scope="col">Edit </th>
+                                                                 <th scope="col">Delete </th>
 
                                                             </tr>
                                                        </thead>
                                                        <tbody>
-                                                            {% for course in courses %}
+                                                            {% for assessment in assessments %}
                                                             <tr>
                                                                  
                                                                       
-                                                                 <td>
-                                                                      <a href="{% url 'updateCourse' course.slug %}">
-
-                                                                           {{course}}
+                                                                 {% comment %} <td ><b>*</b></td> {% endcomment %}
+                                                                 <td >{{assessment.title}}</td>
+                                                                 
+                                                                 <td >
+                                                                      <a href="{% url 'updateAssessment' course.slug assessment.id %}">
+                                                                           <button class="btn btn-primary">Edit</button>
                                                                       </a>
-                                                                 
                                                                  </td>
-                                                                 
-                                                                
+                                                                 <td>
+                                                                      <a href="{% url 'deleteAssessment' course.slug assessment.id %}">
+                                                                           <button class="btn btn-danger">Delete</button>
+                                                                      </a>
+                                                                 </td>
                                                                  
                                                             </tr>
                                                             {% endfor %}
