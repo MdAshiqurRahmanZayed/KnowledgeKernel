@@ -89,23 +89,27 @@ def dashboard(request):
 
 @login_required(login_url='login')
 def create_profile(request):
-     
-     if request.method == "POST":
-          profile_form = UserCreateProfileForm(request.POST  ,  request.FILES)
-          user = request.user
-          if profile_form.is_valid():
-               
-               profile =  profile_form.save( commit=False)
-               profile.user = user
-               profile.save()  
-               
-               messages.success(request, 'Your profile has been created successfully.')
-               return redirect('edit_profile')
+     if UserProfile.objects.filter(user__email = request.user.email).exists():
+          messages.warning(request,"Already created Profile")
+          return redirect('dashboard')
      else:
-          profile_form = UserCreateProfileForm()
-     context = {
-          'profile_form':profile_form
-     }
+          
+          if request.method == "POST":
+               profile_form = UserCreateProfileForm(request.POST  ,  request.FILES)
+               user = request.user
+               if profile_form.is_valid():
+                    
+                    profile =  profile_form.save( commit=False)
+                    profile.user = user
+                    profile.save()  
+                    
+                    messages.success(request, 'Your profile has been created successfully.')
+                    return redirect('edit_profile')
+          else:
+               profile_form = UserCreateProfileForm()
+          context = {
+               'profile_form':profile_form
+          }
      return render(request,'accounts/create_profile.html',context)
                
 

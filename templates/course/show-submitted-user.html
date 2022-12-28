@@ -9,7 +9,7 @@ Mark Assessment
 
 <!-- ========================= SECTION CONTENT ========================= -->
 <section class="section-conten padding-y bg mb-3">
-     
+
      <div class="container mt-2">
           {% include 'includes/alerts.html' %}
           <div class="row">
@@ -25,42 +25,65 @@ Mark Assessment
                          <div class="card-body">
                               <div class="row">
                                    <div class="col-md-12">
-                                        <div class="card" style="text-align:center">
+                                        <div class="card mb-3" style="text-align:center">
                                              <div class="card-body">
-                                                  <h5 class="card-title">
-                                                       Total Submitted : <b>{{count}}</b>
-                                                  </h5>
+                                                  <form action="{% url 'submittedUserSearch' course.slug %}"
+                                                       class="d-flex" method="GET">
+                                                       <input class="form-control me-2" type="search"
+                                                            placeholder="Search email" id="search_user" name="keyword"
+                                                            aria-label="Search">
+                                                       <button class="btn btn-outline-primary" type="submit"><i
+                                                                 class="fas fa-search"></i></button>
+                                                  </form>
 
                                              </div>
 
                                         </div>
 
+                                        <div class="card" style="text-align:center">
+                                             <div class="card-body">
+
+                                                  <h5 class="card-title">
+                                                       {% if  'search' in request.path %}
+
+                                                       Total search result : <b>{{count}}</b>
+                                                       {% else %}
+                                                       Total user : <b>{{users_count}}</b><br>
+                                                       Total Submitted : <b>{{count}}</b>
+                                                       {% endif %}
+                                                  </h5>
+
+                                             </div>
+
+                                        </div>
                                         <div class="card mt-5">
                                              <div class="card-body">
-                                                  
+
                                                   <table class="table">
                                                        <thead>
                                                             <tr>
 
-                                                                 {% comment %} <th scope="col">Serial No</th> {% endcomment %}
-                                                                 <th scope="col">Name</th>
-                                                                 
+                                                                 {% comment %} <th scope="col">Serial No</th>
+                                                                 {% endcomment %}
+                                                                 <th scope="col">Email</th>
+
 
                                                             </tr>
                                                        </thead>
                                                        <tbody>
                                                             {% for user in users %}
-                                                            <tr>      
-                                                                      
-                                                                 <td ><b>
-                                                                      <a href="{% url 'showAllSubmittedAssessmentDetail' course.slug user.user.id %}">
-                                                                           {{user.user}} 
-                                                                      </a>
-                                                                 
-                                                                 </b></td> 
+                                                            <tr>
+
+                                                                 <td><b>
+                                                                           <a
+                                                                                href="{% url 'showAllSubmittedAssessmentDetail' course.slug user.user.id %}">
+                                                                                {{user.user}}
+                                                                           </a>
+
+                                                                      </b></td>
                                                             </tr>
                                                             {% endfor %}
-                                                            
+
                                                        </tbody>
                                                   </table>
 

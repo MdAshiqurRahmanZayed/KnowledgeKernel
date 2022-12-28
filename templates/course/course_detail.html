@@ -133,7 +133,6 @@
           </div>
      </div>
 
-     {% if enrolled %}
           {% if count  %}
 
           <div class="mt-3">
@@ -143,16 +142,21 @@
                          <p class="card-text">
                               {{count}} Assessment
                               <br>
-                              <a href="{% url 'showAllAssessment' course.slug %}">
-
-                                   <button type="button" class=" mt-2 btn btn-outline-primary">Go To Assessment</button>
-                              </a>
+                                   {% if enrolled %}
+                                   <a href="{% url 'showAllAssessment' course.slug %}">
+                                        
+                                        <button type="button" class=" mt-2 btn btn-outline-primary">Go To Assessment</button>
+                                   </a>
+                                   {% elif enrolled == False%}
+                                   <p>Please enroll to see all the assessment.</p>
+                                   {% else %}
+                                    {{enrolled}}
+                                   {% endif %}
                          </p>
                     </div>
                </div>
           </div>
           {% endif %}
-     {% endif %}
 
      {% comment %} description {% endcomment %}
      <div class="mt-3">

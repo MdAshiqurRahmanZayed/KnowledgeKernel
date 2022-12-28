@@ -4,7 +4,8 @@ urlpatterns = [
      path('',homepage,name="home"),
      path('my-courses/',myCreatedCourse,name="myCreatedCourse"),
      path('about-course/<str:slug>',aboutCourse,name="about_course"),
-     
+     path('all-Tags/',allTags,name="allTags"),
+     path ('search/',searchCourse,name= "searchCourse"),
      #Course
      path('create-course/',createCourse,name="create_course"),
      path('update-course/<str:slug>/',updateCourse,name="updateCourse"),
@@ -38,6 +39,7 @@ urlpatterns = [
      
      #marks
      path('submitted-user-course/<str:slug>/',showAllSubmittedAssessmentUser,name="showAllSubmittedAssessmentUser"),
+     path('submitted-user-course/<str:slug>/search/',submittedUserSearch,name="submittedUserSearch"),
      path('course/<str:slug>/all-submitted-assessment/<str:student_user>/',showAllSubmittedAssessmentDetail,name="showAllSubmittedAssessmentDetail"),
      path('course/<str:slug>/mark-assessment/assessment/<int:assessment_pk>/submitted-assessment/<int:submitted_pk>/submitted-user/<int:student_user>/',markAssessment,name="markAssessment"),
      
