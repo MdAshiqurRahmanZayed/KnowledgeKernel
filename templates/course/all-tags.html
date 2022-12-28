@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% load course_custom_tags %}
+{% block title %}
+All Tags
+{% endblock title %}
+{% block content %}
+
+<!-- ========================= SECTION CONTENT ========================= -->
+<section class="section-conten padding-y bg mb-3">
+     {% include 'includes/alerts.html' %}
+     <div class="container mt-2">
+          <div class="row">
+               {% include 'includes/dashboard_sidebar.html' %}
+               
+               <main class="col-md-9">
+                    <article class="card">
+
+                         <header class="card-header">
+                              <strong class="d-inline-block mr-3">
+                                   Show All Tags
+                              </strong>
+                         </header>
+                         <div class="container">
+                              <ol>
+                                   
+                                   {% for tag in tags %}
+                                        
+                                   
+                                   <li>
+                                        {{tag}}
+                                   </li>
+                                   {% endfor %}
+                              </ol>
+
+                         </div>
+                    </article> <!-- order-group.// -->
+               </main>
+          </div> <!-- row.// -->
+     </div>
+
+
+</section>
+
+
+<script>
+     $(document).ready(function () {
+
+          var multipleCancelButton = new Choices('#id_tags', {
+               removeItemButton: true,
+               maxItemCount: 5,
+               searchResultLimit: 5,
+               renderChoiceLimit: 5
+          });
+
+     });
+</script>
+
+
+{% endblock %}

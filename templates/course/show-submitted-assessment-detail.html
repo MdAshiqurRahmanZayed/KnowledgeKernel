@@ -43,7 +43,8 @@ Mark Assessment
                                                             <tr>
 
                                                                  {% comment %} <th scope="col">Serial No</th> {% endcomment %}
-                                                                 <th scope="col">Submitted Assessment</th>
+                                                                 <th scope="col">Assessment</th>
+                                                                 <th scope="col">Answered Assessment</th>
                                                                  <th scope="col">Mark</th>
                                                                  
 
@@ -52,6 +53,9 @@ Mark Assessment
                                                        <tbody>
                                                             {% for submitted_assesment in submitted_assesments %}
                                                             <tr>      
+                                                                 <td>
+                                                                      {{submitted_assesment.assessment.title}} 
+                                                                 </td>
                                                                       
                                                                  <td >
                                                                       <a href="{{submitted_assesment.resource}}"> 

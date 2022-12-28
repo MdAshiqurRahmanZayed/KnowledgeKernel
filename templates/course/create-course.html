@@ -92,9 +92,10 @@ Update course
 
                                    <div class="p-3">
                                         <h4><b>Tags</b> </h4>
-                                        <a href="">
-                                             <h6><a href="">Show all tags</a></h6>
-                                        </a>
+                                        
+                                             <h6>
+                                                  <a href="{% url 'allTags' %}">Show all tags</a>
+                                             </h6>
                                         {{form.tags}}
                                    </div>
 

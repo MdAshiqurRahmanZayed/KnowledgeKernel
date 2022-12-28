@@ -8,12 +8,15 @@ from taggit.models import Tag
 from django.utils.text import slugify
 from django.contrib import messages,auth
 from accounts.models import *
+from django.db.models import Q
 # Create your views here.
 
 def homepage(request):
      courses = Course.objects.filter(active=True)
+     courses_count = Course.objects.filter(active=True).count()
      context = {
-          "courses":courses
+          "courses":courses,
+          "courses_count":courses_count
      }
      return render(request,"home.html",context)
 
@@ -48,7 +51,10 @@ def courseDetail(request,slug,video_unique_id):
      instructor = UserProfile.objects.get( user__id = course.instructor.user.id )
      sections = SectionVideo.objects.filter( course__slug = slug )
      count = Assessment.objects.filter(course__slug = slug).count()
-     enrolled = EnrolledCourse.objects.filter(  course__slug = slug,user = request.user).exists()
+     try:
+          enrolled = EnrolledCourse.objects.filter(  course__slug = slug,user = request.user).exists()
+     except:
+          enrolled = "Please enroll to see all the assessment."
 
      
      # videos = Video.objects.filter(course__slug = slug).order_by("serial_number")
@@ -78,12 +84,41 @@ def courseDetail(request,slug,video_unique_id):
      return render(request,'course/course_detail.html',context)
 
 
+def searchCourse(request):
+     if 'keyword' in request.GET:
+          keyword = request.GET['keyword']
+          
+          if keyword:
+               courses  = Course.objects.order_by('-created_at').filter(Q(name__icontains = keyword) | Q(description__icontains = keyword))
+               courses_count  = courses.count()
+          context = {
+               "courses":courses,
+               "courses_count":courses_count,
+          } 
+     return render(request,"home.html",context)
+
+
+
+#all tags
+@login_required(login_url='login')
+def allTags(request):
+     tags = Tag.objects.all().order_by('name')
+     context = {
+          'tags':tags
+     }
+     
+     
+     return render(request,'course/all-tags.html',context)
+
 
 
 
 # Course CRUD
 @login_required(login_url='login')
 def createCourse(request):
+     if UserProfile.objects.filter(user__email = request.user.email).exists() == False:
+          messages.warning(request,"Please Complete Your Profile")
+          return redirect('create_profile')
      if request.method == "POST":
           form = CourseCreateForm(request.POST,request.FILES)
           user = request.user.userprofile
@@ -134,8 +169,10 @@ def updateCourse(request,slug):
      }
      return render(request,'course/create-course.html',context)
 
+
+@login_required(login_url='login')
 def deleteCourse(request,slug):
-     course = Course.objects.get(slug=slug)
+     course = get_object_or_404(Course,slug = slug ,instructor=request.user.userprofile)
      if request.method == "POST":
           try:
                course.delete()
@@ -155,7 +192,7 @@ def deleteCourse(request,slug):
 # section CRUD
 @login_required(login_url='login')
 def CreateSectionCourse(request,slug):
-     course = Course.objects.get(slug=slug)
+     course = get_object_or_404(Course,slug = slug ,instructor=request.user.userprofile)
      if request.method == "POST":
           form = SectionForm(request.POST)
           try:
@@ -181,7 +218,7 @@ def CreateSectionCourse(request,slug):
 
 @login_required(login_url='login')
 def allSectionCourse(request,slug):
-     course = Course.objects.get(slug=slug)
+     course = get_object_or_404(Course,slug = slug ,instructor=request.user.userprofile)
      sections = SectionVideo.objects.filter(course__slug = slug).order_by('serial_number')
      count = SectionVideo.objects.filter(course__slug = slug).count()
 
@@ -195,7 +232,7 @@ def allSectionCourse(request,slug):
 
 @login_required(login_url='login')
 def updateSection(request,slug,section_slug,pk):
-     course = Course.objects.get(slug=slug)
+     course = get_object_or_404(Course,slug = slug ,instructor=request.user.userprofile)
      data = SectionVideo.objects.get(course = course  , course__instructor = request.user.userprofile,  slug = section_slug,id=pk)
      if request.method == "POST":
           form = SectionForm(request.POST, instance = data)
@@ -222,7 +259,7 @@ def updateSection(request,slug,section_slug,pk):
 
 @login_required(login_url='login')
 def deleteSection(request,slug,section_slug,pk):
-     course = Course.objects.get(slug=slug)
+     course = get_object_or_404(Course,slug = slug ,instructor=request.user.userprofile)
      section = SectionVideo.objects.get(course__slug = slug,course__instructor = request.user.userprofile,slug= section_slug,id=pk)
      if request.method == "POST":
           messages.success(request, 'Your Section has been Deleted Successfully.')
@@ -240,7 +277,7 @@ def deleteSection(request,slug,section_slug,pk):
 # Video CRUD
 @login_required(login_url='login')
 def createSectionVideo(request,slug):
-     course = Course.objects.get(slug=slug)
+     course = get_object_or_404(Course,slug = slug ,instructor=request.user.userprofile)
      sections = SectionVideo.objects.filter(course__slug = slug).order_by('serial_number')
      count = Video.objects.filter(course__slug = slug).count()
      context = {
@@ -255,7 +292,7 @@ def createSectionVideo(request,slug):
 
 @login_required(login_url='login')
 def allSectionVideo(request,slug):
-     course = Course.objects.get(slug=slug)
+     course = get_object_or_404(Course,slug = slug ,instructor=request.user.userprofile)
      sections = SectionVideo.objects.filter( course__slug = slug )
      count = Video.objects.filter(course__slug = slug).count()
      context = {
@@ -269,7 +306,7 @@ def allSectionVideo(request,slug):
 
 @login_required(login_url='login')
 def createVideo(request,slug,section_slug,pk):
-     course = Course.objects.get(slug=slug)
+     course = get_object_or_404(Course,slug = slug ,instructor=request.user.userprofile)
      section = SectionVideo.objects.get(id=pk)
      if request.method == "POST":
           form = VideoForm(request.POST)          
@@ -292,7 +329,7 @@ def createVideo(request,slug,section_slug,pk):
 
 @login_required(login_url='login')
 def updateVideo(request,slug,section_slug,video_unique_id):
-     course = Course.objects.get(slug=slug)
+     course = get_object_or_404(Course,slug = slug ,instructor=request.user.userprofile)
      video = Video.objects.get(course__slug = slug,video_unique_id = video_unique_id )
      if request.method == "POST":
           form = VideoForm(request.POST,instance = video)          
@@ -313,7 +350,7 @@ def updateVideo(request,slug,section_slug,video_unique_id):
 
 @login_required(login_url='login')
 def deleteVideo(request,slug,section_slug,video_unique_id):
-     course = Course.objects.get(slug=slug)
+     course = get_object_or_404(Course,slug = slug ,instructor=request.user.userprofile)
      delete = Video.objects.get(course__slug = slug,video_unique_id = video_unique_id )
      if request.method == "POST":
           messages.success(request, 'Your Video has been Deleted Successfully.')
@@ -330,7 +367,7 @@ def deleteVideo(request,slug,section_slug,video_unique_id):
 # Assessment CRUD
 @login_required(login_url='login')
 def allAssessment(request,slug):
-     course = Course.objects.get(slug=slug)
+     course = get_object_or_404(Course,slug = slug ,instructor=request.user.userprofile)
      assessments = Assessment.objects.filter( course__slug = slug ).order_by('-created_at')
      count = Assessment.objects.filter(course__slug = slug).count()
      context = {
@@ -343,7 +380,7 @@ def allAssessment(request,slug):
 
 @login_required(login_url='login')
 def createAssessment(request,slug):
-     course = Course.objects.get(slug=slug)
+     course = get_object_or_404(Course,slug = slug ,instructor=request.user.userprofile)
      if request.method == "POST":
           form = AssessmentForm(request.POST)
           try:
@@ -366,7 +403,7 @@ def createAssessment(request,slug):
 
 @login_required(login_url='login')
 def updateAssessment(request,slug,pk):
-     course = Course.objects.get(slug=slug)
+     course = get_object_or_404(Course,slug = slug ,instructor=request.user.userprofile)
      assessment = Assessment.objects.get(id = pk)
      if request.method == "POST":
           form = AssessmentForm(request.POST ,instance = assessment)
@@ -393,7 +430,7 @@ def updateAssessment(request,slug,pk):
 
 @login_required(login_url='login')
 def deleteAssessment(request,slug,pk):
-     course = Course.objects.get(slug=slug)
+     course = get_object_or_404(Course,slug = slug ,instructor=request.user.userprofile)
      delete = Assessment.objects.get(id = pk)
      if request.method == "POST":
           messages.success(request, 'Your Assessment has been Deleted Successfully.')
@@ -410,7 +447,7 @@ def deleteAssessment(request,slug,pk):
 #show Assessment
 @login_required(login_url='login')
 def showAllAssessment(request,slug):
-     course = Course.objects.get(slug=slug)
+     course = get_object_or_404(Course,slug = slug ,instructor=request.user.userprofile)
      assessment = Assessment.objects.filter(course = course)
      submitted_assessments = SubmittedAssessment.objects.filter(course = course )
      marks = SubmittedAssessment.objects.filter(course = course,student_user__user=request.user)
@@ -505,25 +542,47 @@ def submitOrUpdateAssessmentUser(request,slug,pk,student_user):
 
 
 #mark Assessment
-
+@login_required(login_url='login')
 def showAllSubmittedAssessmentUser(request,slug):
-     course = Course.objects.get(slug = slug)
+     course = get_object_or_404(Course,slug = slug ,instructor=request.user.userprofile)
      count = SubmittedAssessment.objects.filter(course__slug = slug ).count()
-     users = EnrolledCourse.objects.filter(course__slug = slug)
-     
-     
+     users = EnrolledCourse.objects.filter(course__slug = slug)     
+     users_count = EnrolledCourse.objects.filter(course__slug = slug).count()     
+     context = {
+          "course" : course,
+          "count" : count,
+          "users" : users,
+          "users_count" : users_count,
+     }
+
+     return render(request,'course/show-submitted-user.html',context)
+
+@login_required(login_url='login')
+def submittedUserSearch(request,slug):
+     if 'keyword' in request.GET:
+          keyword = request.GET['keyword']
+          # users = EnrolledCourse.objects.filter(course__slug = slug).filter(user__email__icontains=keyword)
+          users = EnrolledCourse.objects.filter(course__slug = slug)
+          users = users.filter( user__email__icontains = keyword)     
+          # print(users.filter(user__email__icontains = keyword))
+          count = users.count()
+     else:
+          users = EnrolledCourse.objects.filter(course__slug = slug)     
+          count = SubmittedAssessment.objects.filter(course__slug = slug ).count()
+     course = get_object_or_404(Course,slug = slug ,instructor=request.user.userprofile)
      context = {
           "course" : course,
           "count" : count,
           "users" : users,
      }
-
      return render(request,'course/show-submitted-user.html',context)
+     
 
 
+@login_required(login_url='login')
 def showAllSubmittedAssessmentDetail(request,slug,student_user):
-     course = Course.objects.get(slug = slug)
-     submitted_assesments = SubmittedAssessment.objects.filter(course__slug = slug ,student_user__user__id=student_user  ).order_by('assessment')
+     course = get_object_or_404(Course,slug = slug ,instructor=request.user.userprofile)
+     submitted_assesments = SubmittedAssessment.objects.filter(course__slug = slug ,student_user__user__id=student_user  ).order_by('-assessment')
      count = SubmittedAssessment.objects.filter(course__slug = slug, student_user__user__id=student_user ).count()
 
      context = {
@@ -534,7 +593,7 @@ def showAllSubmittedAssessmentDetail(request,slug,student_user):
      return render(request,'course/show-submitted-assessment-detail.html',context)
 
 def markAssessment(request,slug,assessment_pk,submitted_pk,student_user):
-     course = Course.objects.get(slug = slug)
+     course = get_object_or_404(Course,slug = slug ,instructor=request.user.userprofile)
      assessment = Assessment.objects.get(id = assessment_pk)
      submit_ssessment = SubmittedAssessment.objects.get(id = submitted_pk)
      if request.method =="POST":
