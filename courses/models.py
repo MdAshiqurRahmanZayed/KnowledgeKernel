@@ -20,7 +20,9 @@ class Course(models.Model):
     length = models.IntegerField(null=False,default=0)
     tags = TaggableManager()
     prerequisite = models.CharField(max_length = 50 , null = True, blank=True,default="No need ")
-    learning = models.CharField(max_length = 50 , null = False)
+    learning = models.CharField(max_length = 50 , null = False) 
+    
+    top_course = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
@@ -105,7 +107,7 @@ class Assessment(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     title  = models.CharField(max_length = 100 , null = False)
     resource = models.CharField( max_length=200,null=False,blank=False)
-    resource_title = models.CharField(max_length=100,default="Resource")
+    resource_title = models.CharField(max_length=100,default="Assessment")
     maximum_number  = models.IntegerField(null=False) 
     created_at = models.DateTimeField(auto_now_add = True) 
     modified_at = models.DateTimeField(auto_now = True) 

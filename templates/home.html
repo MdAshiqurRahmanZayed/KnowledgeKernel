@@ -1,15 +1,100 @@
 {% extends 'base.html' %}
+{% load static %}
 {% load course_custom_tags %}
 {% block content %}
-<div class="container mt-3 ">
-     Total Courses: <b>{{courses_count}}</b>  
-     <div class="row mt-5">
-          {% for course in courses %}
+<div class="background">
 
-          <div class="col mx-auto mb-3">
-               <div class="card mx-auto" style="width: 18rem;">
-                    <img  src="{{course.thumbnail.url}}" class="card-img-top"
-                         alt="...">
+     <!-- section index main -->
+
+     <div class="index-main p-5 ">
+          <div class="row">
+               <div class="col home-left d-flex align-items-center">
+
+                    <div class="home-left  ">
+                         <h1 class="hero-text">
+                              <div class="hero-color">Learn And Teach</div>
+                              <div class="text-white">From Anywhere</div>
+                         </h1>
+                         <h4 class="text-white">Technology is bringing a massive wave of <b>evolution</b> on
+                              learning things in different ways. </h4>
+                         <br>
+                         <form action="{% url 'searchCourse' %}" class="container hero-search d-flex " method="GET">
+
+                              <input type="search" class="icon form-control me-2" type="search"
+                                  name="keyword" placeholder="Search Course" aria-label="Search">
+                              
+                         </form>
+
+                    </div>
+               </div>
+
+               <div class="col d-flex justify-content-center">
+                    <div class="home-right ">
+
+                         <img src="{% static 'images/web.svg' %}" alt="" height="500px">
+                    </div>
+               </div>
+
+
+          </div>
+     </div>
+
+</div>
+<!-- section Discovery -->
+<div class="container  discovery ">
+     <h1 class="text-center">Why Study With KnowledgeKernel</h1>
+     <h4 class="text-center">Discover your perfect program in our courses.</h4>
+     <div class="discovery-items">
+          <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+               <div class="carousel-inner d-flex justify-content-center">
+                    <div class="carousel-item active ">
+                         <div class="left-space">
+
+                              <i class="fa-solid fa-wand-magic-sparkles"></i>
+                         </div>
+                         <h3 class="left-space-text">Learn Design</h3>
+                    </div>
+                    <div class="carousel-item ">
+                         <div class="left-space">
+                              <i class="fa-solid fa-business-time"></i>
+                         </div>
+                         <h3 class="left-space-text">Learn Business</h3>
+                    </div>
+                    <div class="carousel-item ">
+                         <div class="left-space">
+                              <i class="fa-brands fa-uncharted"></i>
+                         </div>
+                         <h3 class="left-space-text">Learn Software</h3>
+                    </div>
+
+               </div>
+               <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls"
+                    data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+               </button>
+               <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls"
+                    data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+               </button>
+          </div>
+
+
+          <i class="fa-regular fa-brain-circuit"></i>
+     </div>
+</div>
+
+<!-- section Card -->
+<div class="container container-top-course">
+     <h2> <b>Top Courses</b> </h2>
+
+     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3">
+          {%for course in top_course %}
+
+          <div class="col">
+               <div class="card m-2 rounded-4">
+                    <img class="image-fit " src="{{course.thumbnail.url}}" class="card-img-top" alt="...">
                     <div class="card-body">
                          <b>
                               <h4 class="card-title">{{course.name}}</h4>
@@ -23,10 +108,11 @@
                               <span class="fs-5">
                                    Price: <del>{{course.price|dollar}}</del>
                                    &nbsp;
-                                   
-                                   <span>{% course_sell_price course.price course.discount as value %} {{value|dollar}}  </span>
+
+                                   <span>{% course_sell_price course.price course.discount as value %} {{value|dollar}}
+                                   </span>
                               </span>
-                              
+
                          </p>
 
 
@@ -36,7 +122,72 @@
                                    <a class="btn btn-primary btn-block" href="">Enroll Now</a>
                               </div>
                               <div class="col">
-                                   <a class="btn btn-info btn-block" href="{% url 'about_course' course.slug %}">Show More</a>
+                                   <a class="btn btn-info btn-block" href="{% url 'about_course' course.slug %}">Show
+                                        More</a>
+                              </div>
+                         </div>
+
+
+                    </div>
+               </div>
+          </div>
+          {% endfor %}
+
+     </div>
+     <div class="container d-flex justify-content-center align-items-center p-3">
+
+
+          <div class="btn btn-outline-primary w-50 ">
+               Show All
+          </div>
+     </div>
+</div>
+<!-- section Footer -->
+<div class="footer text-white">
+     <h4>Copyright © 2023 CreativeLayers. All Right Reserved.</h4>
+</div>
+
+
+
+
+<!--
+<div class="container mt-3 ">
+     Total Courses: <b>{{courses_count}}</b>
+     <div class="row mt-5">
+          {% for course in courses %}
+
+          <div class="col mx-auto mb-3">
+               <div class="card mx-auto" style="width: 18rem;">
+                    <img src="{{course.thumbnail.url}}" class="card-img-top" alt="...">
+                    <div class="card-body">
+                         <b>
+                              <h4 class="card-title">{{course.name}}</h4>
+                         </b>
+                         {% comment %} {{course.video_set.all.0.video_unique_id}} {% endcomment %}
+                         <p class="card-text">
+                              Save: <b>
+                                   {{course.discount}}%
+                              </b>
+                              <br>
+                              <span class="fs-5">
+                                   Price: <del>{{course.price|dollar}}</del>
+                                   &nbsp;
+
+                                   <span>{% course_sell_price course.price course.discount as value %} {{value|dollar}}
+                                   </span>
+                              </span>
+
+                         </p>
+
+
+
+                         <div class="row mt-3 ">
+                              <div class="col ">
+                                   <a class="btn btn-primary btn-block" href="">Enroll Now</a>
+                              </div>
+                              <div class="col">
+                                   <a class="btn btn-info btn-block" href="{% url 'about_course' course.slug %}">Show
+                                        More</a>
                               </div>
                          </div>
 
@@ -50,8 +201,8 @@
 
      </div>
 
-
-
-
 </div>
+
+
+-->
 {% endblock content %}

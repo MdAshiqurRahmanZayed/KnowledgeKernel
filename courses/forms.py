@@ -79,7 +79,7 @@ class AssessmentForm(forms.ModelForm):
 class SubmittedAssessmentForm(forms.ModelForm):
    class Meta:
       model = SubmittedAssessment
-      fields = ['resource','resource_title']
+      fields = ['resource_title','resource']
    def __init__(self, *args, **kwargs):
          super(SubmittedAssessmentForm, self).__init__(*args, **kwargs)       
          self.fields['resource'].widget.attrs['class'] = 'form-control'

@@ -14,9 +14,11 @@ from django.db.models import Q
 def homepage(request):
      courses = Course.objects.filter(active=True)
      courses_count = Course.objects.filter(active=True).count()
+     top_course = Course.objects.filter(top_course = True)
      context = {
           "courses":courses,
-          "courses_count":courses_count
+          "courses_count":courses_count,
+          "top_course":top_course
      }
      return render(request,"home.html",context)
 
@@ -24,6 +26,7 @@ def homepage(request):
 def myCreatedCourse(request):
      createdCourse = Course.objects.filter(instructor = request.user.userprofile).count()
      courses = Course.objects.filter(instructor = request.user.userprofile).order_by('-created_at')
+     # memberCount = Course.objects.filter(instructor = request.user.userprofile).count()
      context = {
           "createdCourse":createdCourse,
           "courses":courses
@@ -131,7 +134,6 @@ def createCourse(request):
                form.save()
                course.save() 
                messages.success(request, 'Your Course has been Created.')
-               
                return redirect('myCreatedCourse')
           
      else:
@@ -146,19 +148,22 @@ def createCourse(request):
 def updateCourse(request,slug):
      course = get_object_or_404(Course,slug = slug ,instructor=request.user.userprofile)
      if request.method == "POST":
-          form = CourseCreateForm(request.POST, request.FILES , instance = course)          
-          if form.is_valid():
-               course_update = form.save( commit = False)
-               data = form.cleaned_data.get("name")
-               course_update.slug = slugify(data, allow_unicode=True)
-               # tags = form.cleaned_data.get("tags")
-               
-               
-               # course.tags = tags
-               form.save()
-               course_update.save() 
-               messages.success(request, 'Your Course has been Updated Successfully.')
-               return redirect('myCreatedCourse')
+          form = CourseCreateForm(request.POST, request.FILES , instance = course) 
+          try:         
+               if form.is_valid():
+                    course_update = form.save( commit = False)
+                    data = form.cleaned_data.get("name")
+                    course_update.slug = slugify(data, allow_unicode=True)
+                    # tags = form.cleaned_data.get("tags")
+                    
+                    
+                    # course.tags = tags
+                    form.save()
+                    course_update.save() 
+                    messages.success(request, 'Your Course has been Updated Successfully.')
+                    return redirect('updateCourse',slug)
+          except:
+                    return redirect('updateCourse',slug)
           
      else:
           form = CourseCreateForm(instance = course )
@@ -447,7 +452,7 @@ def deleteAssessment(request,slug,pk):
 #show Assessment
 @login_required(login_url='login')
 def showAllAssessment(request,slug):
-     course = get_object_or_404(Course,slug = slug ,instructor=request.user.userprofile)
+     course = get_object_or_404(Course,slug = slug )
      assessment = Assessment.objects.filter(course = course)
      submitted_assessments = SubmittedAssessment.objects.filter(course = course )
      marks = SubmittedAssessment.objects.filter(course = course,student_user__user=request.user)

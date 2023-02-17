@@ -52,8 +52,10 @@ def login(request):
           user = auth.authenticate( email=email, password=password)
           if user is not None:
                auth.login(request,user)
+               messages.success(request, 'You are successfully logged in.')
                return redirect('dashboard')
           else:
+               messages.warning(request, 'Bad cradentials.')
                return redirect('login')
           
      return render(request,'accounts/login.html')
@@ -62,7 +64,7 @@ def login(request):
 @login_required(login_url = 'login')
 def logout(request):
      auth.logout(request)
-     # messages.success(request, 'You are logged out.')
+     messages.success(request, 'You are logged out.')
      return redirect('login')
 
 @login_required(login_url='login')

@@ -88,3 +88,159 @@ a {
 .form-background {
    background-color: #90bcff;
 }
+
+
+/* main page css */
+
+.background {
+   padding: 0px;
+   margin: 0px;
+
+   border-radius: 0 0 30% 0;
+   height: 1100px;
+   background: #3F4E4F;
+   /*   background-image: linear-gradient(120deg, #84D2C5, #567189); */
+}
+
+
+.index-main {
+   display: flex;
+}
+
+.home-left {
+
+   left: 0px;
+}
+
+
+.home-right {
+   right: 0px;
+
+
+}
+
+.text-white {
+   color: white;
+
+}
+
+.hero-text {
+
+   font-size: 80px;
+}
+
+.hero-color {
+   color: #A27B5C;
+   font-weight: bold;
+   text-shadow: 7px 5px 6px #4f3029;
+}
+
+.navbar-container {
+   background-image: linear-gradient(120deg, #84D2C5, #567189);
+
+}
+
+.navbar {
+   background: #3F4E4F;
+   /* background-color: #0000000; */
+   transition: background-color 2s ease;
+   margin: 0px;
+   padding: 0px;
+}
+
+.navbar-bg {}
+
+.navbar.scrolled {
+   background-color: #043435;
+}
+
+
+
+.discovery-items {
+   font-size: 100px;
+}
+
+.hero-search input {
+   width: 500px;
+   background: url(search.svg) no-repeat scroll 7px 7px left;
+   padding-left: 30px;
+}
+
+.icon {
+   padding-left: 25px;
+   background: url("https://static.thenounproject.com/png/101791-200.png") no-repeat left;
+   background-size: 20px;
+   background-color: white;
+}
+
+.search-btn {
+   right: -10px;
+}
+
+.left-space {
+   position: relative;
+   left: -60px;
+   padding: 20px;
+}
+
+.left-space-text {
+   position: relative;
+   left: -120px;
+   padding: 20px;
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+   height: 100px;
+   width: 100px;
+   outline: black;
+   background-size: 100%, 100%;
+   border-radius: 50%;
+   border: 2px solid black;
+   background-image: none;
+   background-color: #CEE5D0;
+}
+
+.carousel-control-next-icon:after {
+   content: '>';
+   font-size: 150px;
+   color: #876445;
+   bottom: 80px;
+   position: relative;
+}
+
+.carousel-control-prev-icon:after {
+   content: '<';
+   font-size: 150px;
+   color: #876445;
+   bottom: 80px;
+   position: relative;
+}
+
+.discovery {
+   margin-top: 80px;
+}
+
+
+/* Card */
+.container-top-course{
+   
+}
+
+.image-fit {
+
+   width: auto;
+   height: 250px;
+   object-fit: cover;
+   border-top-left-radius: inherit;
+   border-top-right-radius: inherit;
+}
+
+.footer {
+   position: sticky;
+   display: flex;
+   justify-content: center;
+   background-color: #0F3D3E;
+   height: 80px;
+   align-items: center;
+}

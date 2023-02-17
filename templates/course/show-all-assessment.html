@@ -60,6 +60,7 @@ Assessment:{{course.name}}
 
                                                   
                                                    <td>
+                                                       {% comment %} {{assessment.submittedassessment_set.all}} {% endcomment %}
                                                        <a
                                                             href="{% url 'submitOrUpdateAssessmentUser' course.slug assessment.id  request.user.id %}">
 

@@ -43,3 +43,13 @@ function removeElement(element) {
 
 
 
+var navbar = document.querySelector('.navbar');
+var threshold = 200;
+
+window.addEventListener('scroll', function () {
+     if (window.scrollY >= threshold) {
+          navbar.classList.add('scrolled');
+     } else {
+          navbar.classList.remove('scrolled');
+     }
+});

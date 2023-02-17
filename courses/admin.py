@@ -46,7 +46,7 @@ class CourseMarkAdmin(admin.TabularInline):
 class CourseAdmin(admin.ModelAdmin):
     inlines = [ SectionVideoAdmin ,CourseVideoAdmin,CourseAssessmentAdmin]
     prepopulated_fields = {"slug": ("name",)}  # new
-    list_display = ("name","price","discount","active", "instructor")
+    list_display = ("name","price","discount","active", "instructor" ,"top_course")
     search_fields = ['name']
     
 class SectionVideoAdminModel(admin.ModelAdmin):
