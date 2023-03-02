@@ -20,9 +20,9 @@
                          <br>
                          <form action="{% url 'searchCourse' %}" class="container hero-search d-flex " method="GET">
 
-                              <input type="search" class="icon form-control me-2" type="search"
-                                  name="keyword" placeholder="Search Course" aria-label="Search">
-                              
+                              <input type="search" class="icon form-control me-2" type="search" name="keyword"
+                                   placeholder="Search Course" aria-label="Search">
+
                          </form>
 
                     </div>
@@ -137,14 +137,13 @@
      <div class="container d-flex justify-content-center align-items-center p-3">
 
 
-          <div class="btn btn-outline-primary w-50 ">
-               Show All
-          </div>
+
+          <a href="{% url 'allCourses' %}">
+               <div style="width: 900px;" class="btn btn-outline-primary btn-lg">
+                    Show All
+               </div>
+          </a>
      </div>
-</div>
-<!-- section Footer -->
-<div class="footer text-white">
-     <h4>Copyright © 2023 CreativeLayers. All Right Reserved.</h4>
 </div>
 
 

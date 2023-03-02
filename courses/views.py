@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect,get_object_or_404
 from django.http import HttpResponse
-from .models import Course,Video,SectionVideo,Assessment,SubmittedAssessment,EnrolledCourse
+from .models import Course,Video,SectionVideo,Assessment,SubmittedAssessment,EnrolledCourse,Category
 from accounts.models import UserProfile
 from django.contrib.auth.decorators import login_required
 from .forms import CourseCreateForm,SectionForm,VideoForm,AssessmentForm,SubmittedAssessmentForm,MarkForm
@@ -8,17 +8,22 @@ from taggit.models import Tag
 from django.utils.text import slugify
 from django.contrib import messages,auth
 from accounts.models import *
-from django.db.models import Q
+from django.db.models import Q 
+from mptt.templatetags.mptt_tags import tree_info 
+
 # Create your views here.
 
 def homepage(request):
      courses = Course.objects.filter(active=True)
      courses_count = Course.objects.filter(active=True).count()
      top_course = Course.objects.filter(top_course = True)
+     categories = Category.objects.all()
      context = {
           "courses":courses,
           "courses_count":courses_count,
-          "top_course":top_course
+          "top_course":top_course,
+          "categories":categories,
+          'tree_info': tree_info(categories),
      }
      return render(request,"home.html",context)
 
@@ -34,7 +39,19 @@ def myCreatedCourse(request):
      
      return render(request,'course/my_courses.html',context)
 
-
+def allCourses(request):
+     courses = Course.objects.filter(active=True)
+     courses_count = Course.objects.filter(active=True).count()
+     top_course = Course.objects.filter(top_course = True)
+     categories = Category.objects.all()
+     context = {
+          "courses":courses,
+          "courses_count":courses_count,
+          "top_course":top_course,
+          "categories":categories,
+          'tree_info': tree_info(categories),
+     }
+     return render(request,'course/all-courses.html',context)
 
 
 #course
@@ -47,6 +64,22 @@ def aboutCourse(request,slug):
           "sections":sections,
      }
      return render(request,'course/about-course.html',context)
+
+def viewCourseCategoriesWise(request,slug):
+     courses = Course.objects.filter(active=True ,categories__slug  = slug)
+     category = Category.objects.get(slug=slug)
+     courses_count = courses.count()
+     top_course = Course.objects.filter(top_course = True)
+     categories = Category.objects.all() 
+     context = {
+          "courses":courses,
+          "courses_count":courses_count,
+          "top_course":top_course,
+          "categories":categories,
+          "category":category,
+          'tree_info': tree_info(categories),
+     }
+     return render(request,'course/all-courses.html',context)
 
 
 def courseDetail(request,slug,video_unique_id):
@@ -98,7 +131,7 @@ def searchCourse(request):
                "courses":courses,
                "courses_count":courses_count,
           } 
-     return render(request,"home.html",context)
+     return render(request,"course/all-courses.html",context)
 
 
 

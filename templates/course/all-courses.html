@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% load course_custom_tags %}
+
+{% block title %}
+All Courses
+{% endblock title %}
+
+{% block content %}
+<div class="container mt-4 ">
+     <div class="container">
+
+          <form action="{% url 'searchCourse' %}" class="form-inline p-3 d-flex justify-content-center ">
+               <input class="form-control  mx-5" type="search" placeholder="Search Course" aria-label="Search" name="keyword">
+               <button class="btn btn-outline-success my-2 my-sm-0 " type="submit">Search</button>
+          </form>
+     </div>
+     <div class="container mt-3 ">
+          <h2><a href="{% url 'allCourses' %}">All Courses</a> </h2>
+          <h2>
+               Course:     
+               <b>
+          {% if 'categor' in request.path %}
+               {{category}}
+               
+          {% endif %}</b></h2>
+          Total Courses: <b>{{courses_count}}</b>
+          <div class="row mt-5">
+               {% for course in courses %}
+
+               <div class="col mx-auto mb-3">
+                    <div class="card mx-auto" style="width: 18rem; height:500px">
+                         <img style=" height:400px" src="{{course.thumbnail.url}}" class="card-img-top" alt="...">
+                         <div class="card-body">
+                              <b>
+                                   <h4 class="card-title">{{course.name}}</h4>
+                              </b>
+                              {% comment %} {{course.video_set.all.0.video_unique_id}} {% endcomment %}
+                              <p class="card-text">
+                                   Save: <b>
+                                        {{course.discount}}%
+                                   </b>
+                                   <br>
+                                   <span class="fs-5">
+                                        Price: <del>{{course.price|dollar}}</del>
+                                        &nbsp;
+
+                                        <span>{% course_sell_price course.price course.discount as value %}
+                                             {{value|dollar}}
+                                        </span>
+                                   </span>
+
+                              </p>
+
+
+
+                              <div class="row mt-3 ">
+                                   <div class="col ">
+                                        <a class="btn btn-primary btn-block" href="">Enroll Now</a>
+                                   </div>
+                                   <div class="col">
+                                        <a class="btn btn-info btn-block"
+                                             href="{% url 'about_course' course.slug %}">Show
+                                             More</a>
+                                   </div>
+                              </div>
+
+
+                         </div>
+                    </div>
+               </div>
+
+               {% endfor %}
+
+
+          </div>
+
+     </div>
+</div>
+{% endblock %}

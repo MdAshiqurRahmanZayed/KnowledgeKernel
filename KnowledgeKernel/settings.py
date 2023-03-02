@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'courses',
     'taggit',
     'accounts',
+    'mptt',
 ]
 
 MIDDLEWARE = [
@@ -65,6 +66,10 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                'courses.context_processor.menu_links',
+                'courses.context_processor.categories',
+                
+                # 'mptt.context_processors.mptt',
             ],
         },
     },

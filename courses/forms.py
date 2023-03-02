@@ -1,17 +1,20 @@
 from django import forms
 from .models import Course,SectionVideo,Video,Assessment,SubmittedAssessment,Mark
 from taggit.models import Tag 
-
+from courses.models import Category
 class CourseCreateForm(forms.ModelForm):
    #  tags = forms.ModelMultipleChoiceField(label='Tags', queryset=Tag.objects.order_by('name'),widget=forms.SelectMultiple)
     tags = forms.ModelMultipleChoiceField(label='Tags', queryset=Tag.objects.order_by('name'),widget=forms.SelectMultiple)
+    categories =  forms.ModelChoiceField(queryset=Category.objects.all(), widget=forms.Select(attrs={'class': 'form-control'}))
+    
    #  tags = forms.CharField(queryset=Tag.objects.order_by('name'),widget=forms.SelectMultiple)
    #  active = forms.BooleanField(widget=forms.CheckboxInput (attrs={'class':'form-check-input','type':'checkbox'}))
     class Meta:
         model = Course
-        fields = ["name","description","price","discount","thumbnail","tags","resource","length","prerequisite","learning","active"]
+        fields = ["name","description","categories","price","discount","thumbnail","tags","resource","length","prerequisite","learning","active"]
         widgets = {
              'description' : forms.Textarea(attrs={'class':'form-control'}),
+
          } 
     def __init__(self, *args, **kwargs):
           super(CourseCreateForm, self).__init__(*args, **kwargs)

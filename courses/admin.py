@@ -1,6 +1,11 @@
 from django.contrib import admin
-from .models import Course,Video,SectionVideo,Assessment,SubmittedAssessment,Mark,EnrolledCourse
+from .models import Course,Video,SectionVideo,Assessment,SubmittedAssessment,Mark,EnrolledCourse,Category
 # Register your models here.
+
+class CategoryAdmin(admin.ModelAdmin):
+    prepopulated_fields = {"slug": ("name",)}  # new
+    list_display = ("name","parent","modified_at")
+    
 
 
 
@@ -88,4 +93,5 @@ admin.site.register(SectionVideo,SectionVideoAdminModel)
 admin.site.register(Assessment,AssessmentAdmin)
 admin.site.register(SubmittedAssessment,SubmittedAssessmentAdmin)
 admin.site.register(Mark,MarkAdmin)
-admin.site.register(EnrolledCourse,EnrolledAdmin)
+admin.site.register(EnrolledCourse,EnrolledAdmin) 
+admin.site.register(Category,CategoryAdmin)
