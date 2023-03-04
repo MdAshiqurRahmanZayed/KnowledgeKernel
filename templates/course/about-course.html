@@ -119,7 +119,16 @@
                     </ul>
                </h5>
                <h5>Length: {{course.length}} hours on-demand video</h5>
+               
+               {% if check_enrolled is False%}
+                    
+               <form class="" method="POST" >
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-primary mb-3">Enroll Course</button>
 
+               </form>
+               {% endif %}
+                    
           </div>
 
      </div>

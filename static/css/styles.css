@@ -108,15 +108,12 @@ a {
 }
 
 .home-left {
-
    left: 0px;
 }
 
 
 .home-right {
    right: 0px;
-
-
 }
 
 .text-white {
@@ -270,3 +267,33 @@ a {
    height: 80px;
    align-items: center;
 } 
+
+
+/* responsieve */
+/* Tablet styles */
+@media (max-width: 768px) {
+   .container {
+      width: 750px;
+   }
+}
+
+/* Mobile styles */
+@media (max-width: 480px) {
+   .container {
+      width: 100%;
+      padding: 0px;
+   }
+   .hero-color{
+      font-size: 30px;
+      text-align: center;
+   }
+   h1.text-white {
+      font-size: 30px;
+      text-align: center;
+   }
+   h4.text-white {
+       font-size: 25px;
+       text-align: center;
+   }
+}
+

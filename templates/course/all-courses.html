@@ -17,19 +17,27 @@ All Courses
      <div class="container mt-3 ">
           <h2><a href="{% url 'allCourses' %}">All Courses</a> </h2>
           <h2>
+               
+               {% if 'categor' in request.path %}
                Course:     
                <b>
-          {% if 'categor' in request.path %}
                {{category}}
                
-          {% endif %}</b></h2>
+          </b></h2>
+          {% endif %}
+          
+          {% if 'search' in request.path %}
+               Search keyword: <b>{{keyword}}</b>
+               <br> 
+          {% endif %}
+               
           Total Courses: <b>{{courses_count}}</b>
           <div class="row mt-5">
                {% for course in courses %}
 
                <div class="col mx-auto mb-3">
                     <div class="card mx-auto" style="width: 18rem; height:500px">
-                         <img style=" height:400px" src="{{course.thumbnail.url}}" class="card-img-top" alt="...">
+                         <img style="height:300px" src="{{course.thumbnail.url}}" class="card-img-top" alt="...">
                          <div class="card-body">
                               <b>
                                    <h4 class="card-title">{{course.name}}</h4>

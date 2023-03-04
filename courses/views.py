@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect,get_object_or_404
 from django.http import HttpResponse
-from .models import Course,Video,SectionVideo,Assessment,SubmittedAssessment,EnrolledCourse,Category
+from .models import Course,Video,SectionVideo,Assessment,SubmittedAssessment,EnrolledCourse,Category,EnrolledCourse
 from accounts.models import UserProfile
 from django.contrib.auth.decorators import login_required
 from .forms import CourseCreateForm,SectionForm,VideoForm,AssessmentForm,SubmittedAssessmentForm,MarkForm
@@ -27,6 +27,8 @@ def homepage(request):
      }
      return render(request,"home.html",context)
 
+
+
 @login_required(login_url='login')
 def myCreatedCourse(request):
      createdCourse = Course.objects.filter(instructor = request.user.userprofile).count()
@@ -38,6 +40,21 @@ def myCreatedCourse(request):
      }
      
      return render(request,'course/my_courses.html',context)
+
+
+@login_required(login_url='login')
+def myCourses(request):
+     enrolledCourseCount = EnrolledCourse.objects.filter(user = request.user).count()
+     enrolledCourse = EnrolledCourse.objects.filter(user = request.user).order_by('-created_at')
+     # memberCount = Course.objects.filter(instructor = request.user.userprofile).count()
+     context = {
+          "enrolledCourseCount":enrolledCourseCount,
+          "enrolledCourse":enrolledCourse
+     }
+     
+     return render(request,'course/my_courses.html',context)
+
+
 
 def allCourses(request):
      courses = Course.objects.filter(active=True)
@@ -54,14 +71,33 @@ def allCourses(request):
      return render(request,'course/all-courses.html',context)
 
 
+#Enrolled Course
+
+
+
+
 #course
 
 def aboutCourse(request,slug):
      course = Course.objects.get(slug=slug)
-     sections = SectionVideo.objects.filter( course__slug = slug )
+     sections = SectionVideo.objects.filter( course__slug = slug ) 
+     try:
+          check_enrolled = EnrolledCourse.objects.get(user = request.user,course = course,enrolled=False)
+     except:
+          check_enrolled = EnrolledCourse.objects.get(user = request.user,course = course)
+     if request.method == "POST" and check_enrolled:
+          # EnrolledCourse.objects.create(user = request.user,course = course,enrolled=True)
+          # print("test")
+          obj = EnrolledCourse(user = request.user,course = course,enrolled=True)
+          obj.save()
+          return redirect('dashboard')
+     else:
+          redirect("about_course",slug)
+     
      context = {
           "course":course,
           "sections":sections,
+          "check_enrolled":check_enrolled,
      }
      return render(request,'course/about-course.html',context)
 
@@ -130,6 +166,7 @@ def searchCourse(request):
           context = {
                "courses":courses,
                "courses_count":courses_count,
+               "keyword":keyword,
           } 
      return render(request,"course/all-courses.html",context)
 

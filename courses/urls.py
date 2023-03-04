@@ -3,7 +3,8 @@ from .views import *
 urlpatterns = [
      path('',homepage,name="home"),
      path('all-courses',allCourses,name="allCourses"),
-     path('my-courses/',myCreatedCourse,name="myCreatedCourse"),
+     path('my-courses/',myCourses,name="myCourses"),
+     path('my-created-courses/',myCreatedCourse,name="myCreatedCourse"),
      path('about-course/<str:slug>',aboutCourse,name="about_course"),
      path('all-Tags/',allTags,name="allTags"),
      path ('search/',searchCourse,name= "searchCourse"),
