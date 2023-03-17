@@ -101,7 +101,7 @@ class Video(models.Model):
     video_description = models.CharField(max_length = 500 , null = True)
     serial_number = models.IntegerField(null=False)
     video_id = models.CharField(max_length = 100 , null = False)
-    resource = models.CharField( max_length=200,null=True,blank=True)
+    resource = models.CharField( max_length=500,null=True,blank=True)
     resource_title = models.CharField(max_length=100,null=True,blank=True)
     is_preview = models.BooleanField(default = False)
     video_unique_id = models.CharField(max_length=100, blank=True, unique=True, default=uuid.uuid4)
@@ -134,7 +134,7 @@ class EnrolledCourse(models.Model):
 class Assessment(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     title  = models.CharField(max_length = 100 , null = False)
-    resource = models.CharField( max_length=200,null=False,blank=False)
+    resource = models.CharField( max_length=500,null=False,blank=False)
     resource_title = models.CharField(max_length=100,default="Assessment")
     maximum_number  = models.IntegerField(null=False) 
     created_at = models.DateTimeField(auto_now_add = True) 
@@ -146,9 +146,9 @@ class Assessment(models.Model):
 
 class SubmittedAssessment(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
-    student_user = models.ForeignKey(EnrolledCourse, on_delete=models.CASCADE)
+    student_user = models.ForeignKey(Account, on_delete=models.CASCADE)
     assessment = models.ForeignKey(Assessment, on_delete=models.CASCADE)
-    resource = models.CharField( max_length=200,null=False,blank=False)
+    resource = models.CharField( max_length=500,null=False,blank=False)
     resource_title = models.CharField(max_length=100,null=False,blank=False)
     obtained_mark = models.IntegerField(default = 0)
     feedback = models.CharField( max_length=200,null=True,blank=True) 
@@ -158,16 +158,16 @@ class SubmittedAssessment(models.Model):
     def __str__(self):
         return f'{self.student_user}'
 
-    # obtained = models.IntegerField(default =0)
+
+class Payment(models.Model):
+    user = models.ForeignKey(Account, on_delete=models.CASCADE)
+    val_id  = models.CharField( max_length=60)
+    amount = models.CharField( max_length=60)
+    description = models.CharField(max_length=255,null=True,blank=True)
+    transaction_id = models.CharField(max_length=255, unique=True,null=True,blank=True)
+    status = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add = True) 
+    modified_at = models.DateTimeField(auto_now = True) 
     
-class Mark(models.Model):
-    assessment = models.ForeignKey(Assessment, on_delete=models.CASCADE)
-    student_user = models.ForeignKey(Account, on_delete=models.CASCADE)
-    student_submitted_assessment = models.ForeignKey(SubmittedAssessment, on_delete=models.CASCADE)
-    obtained_mark = models.IntegerField(default = 0)
-    feedback = models.CharField( max_length=200,null=True,blank=True) 
-    
-    # def __str__(self):
-    #     return self.assessment
-     
-     
+    def __str__(self):
+        return f'{self.user} '

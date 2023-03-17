@@ -46,7 +46,7 @@
 
                <div class="col-3">
                     <ul id='video_list' class="list-group overflow-scroll">
-
+                         {% comment %} {{enrolled}} {% endcomment %}
                          {% for item in sections %}
                          {% comment %} {{video_youtube.section_video}} {% endcomment %}
                          <div id="my-scope-{{item}}" class=" wrapper 
@@ -62,7 +62,7 @@
                               {% for video in item.video_set.all  %}
                               {% comment %} {{video.video_id}} {% endcomment %}
                               <div class="content  ">
-                                   {% if video.is_preview  is False %}
+                                   {% if video.is_preview  is False and enrolled == False  %}
 
 
                                    <div

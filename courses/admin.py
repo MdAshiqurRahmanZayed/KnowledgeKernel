@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Course,Video,SectionVideo,Assessment,SubmittedAssessment,Mark,EnrolledCourse,Category
+from .models import Course,Video,SectionVideo,Assessment,SubmittedAssessment,EnrolledCourse,Category,Payment
 # Register your models here.
 
 class CategoryAdmin(admin.ModelAdmin):
@@ -34,9 +34,9 @@ class CourseAssessmentAdmin(admin.TabularInline):
 class CourseSubmittedAssessmentAdmin(admin.TabularInline):
     model = SubmittedAssessment
     extra = 0
-class CourseMarkAdmin(admin.TabularInline):
-    model = Mark
-    extra = 0
+# class CourseMarkAdmin(admin.TabularInline):
+#     model = Mark
+#     extra = 0
 
 
 
@@ -92,6 +92,7 @@ admin.site.register(Video)
 admin.site.register(SectionVideo,SectionVideoAdminModel)
 admin.site.register(Assessment,AssessmentAdmin)
 admin.site.register(SubmittedAssessment,SubmittedAssessmentAdmin)
-admin.site.register(Mark,MarkAdmin)
+# admin.site.register(Mark,MarkAdmin)
 admin.site.register(EnrolledCourse,EnrolledAdmin) 
 admin.site.register(Category,CategoryAdmin)
+admin.site.register(Payment)

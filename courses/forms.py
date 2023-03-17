@@ -1,5 +1,5 @@
 from django import forms
-from .models import Course,SectionVideo,Video,Assessment,SubmittedAssessment,Mark
+from .models import Course,SectionVideo,Video,Assessment,SubmittedAssessment
 from taggit.models import Tag 
 from courses.models import Category
 class CourseCreateForm(forms.ModelForm):
@@ -14,7 +14,6 @@ class CourseCreateForm(forms.ModelForm):
         fields = ["name","description","categories","price","discount","thumbnail","tags","resource","length","prerequisite","learning","active"]
         widgets = {
              'description' : forms.Textarea(attrs={'class':'form-control'}),
-
          } 
     def __init__(self, *args, **kwargs):
           super(CourseCreateForm, self).__init__(*args, **kwargs)

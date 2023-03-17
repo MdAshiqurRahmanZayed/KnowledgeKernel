@@ -47,7 +47,10 @@ urlpatterns = [
      path('course/<str:slug>/mark-assessment/assessment/<int:assessment_pk>/submitted-assessment/<int:submitted_pk>/submitted-user/<int:student_user>/',markAssessment,name="markAssessment"),
      
      
-     
-     
      path('course/<slug:slug>/learn/lecture/<str:video_unique_id>/',courseDetail,name="courseDetail"),
+     # payment
+     path('initiate-payment/<str:pk>', initiate, name='initiate_payment'),
+     path('<int:user_id>/<int:course_id>/payment/success/', success, name='success'),
+     path('<int:course_id>/payment/failure/', failPayment, name='failPayment'),
+     path('<int:course_id>/payment/cancel/', failPayment, name='cancelPayment'),
 ]

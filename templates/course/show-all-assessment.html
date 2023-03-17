@@ -57,12 +57,11 @@ Assessment:{{course.name}}
                                                        {{assessment.maximum_number}}
                                                   </td>
 
-
                                                   
                                                    <td>
                                                        {% comment %} {{assessment.submittedassessment_set.all}} {% endcomment %}
                                                        <a
-                                                            href="{% url 'submitOrUpdateAssessmentUser' course.slug assessment.id  request.user.id %}">
+                                                            href="{% url 'submitOrUpdateAssessmentUser' course.slug assessment.id  user.id %}">
 
                                                             <div class="btn btn-outline-primary"> Create/Update Answer</div>
                                                        </a>

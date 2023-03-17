@@ -94,7 +94,7 @@ class UserProfile(models.Model):
     first_name      = models.CharField(max_length=50)
     last_name       = models.CharField(max_length=50)
     profession       = models.CharField(max_length=50)
-    website         = models.CharField(max_length=50)
+    website         = models.CharField(max_length=70)
     linkedin         = models.CharField(blank=True,null=True, max_length=50)
     about           = models.TextField()
     phone_number    = models.CharField(max_length=50)

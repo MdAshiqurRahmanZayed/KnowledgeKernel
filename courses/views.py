@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect,get_object_or_404
 from django.http import HttpResponse
-from .models import Course,Video,SectionVideo,Assessment,SubmittedAssessment,EnrolledCourse,Category,EnrolledCourse
+from .models import Course,Video,SectionVideo,Assessment,SubmittedAssessment,EnrolledCourse,Category,EnrolledCourse,Payment
 from accounts.models import UserProfile
 from django.contrib.auth.decorators import login_required
 from .forms import CourseCreateForm,SectionForm,VideoForm,AssessmentForm,SubmittedAssessmentForm,MarkForm
@@ -10,6 +10,14 @@ from django.contrib import messages,auth
 from accounts.models import *
 from django.db.models import Q 
 from mptt.templatetags.mptt_tags import tree_info 
+from django.core.paginator import EmptyPage,PageNotAnInteger,Paginator
+from sslcommerz_lib import SSLCOMMERZ 
+from django.shortcuts import render
+from django.views.decorators.csrf import csrf_exempt
+from courses.sslcommerz import initiate_payment
+from django.conf import settings
+import json
+from django.contrib.sites.shortcuts import get_current_site
 
 # Create your views here.
 
@@ -57,12 +65,19 @@ def myCourses(request):
 
 
 def allCourses(request):
-     courses = Course.objects.filter(active=True)
+     courses = Course.objects.filter(active=True).order_by( '-id')
      courses_count = Course.objects.filter(active=True).count()
      top_course = Course.objects.filter(top_course = True)
      categories = Category.objects.all()
+     
+     #pagination
+     paginator = Paginator(courses,2)
+     page = request.GET.get('page')
+     pagedCourses = paginator.get_page(page)
+     
+     
      context = {
-          "courses":courses,
+          "courses":pagedCourses,
           "courses_count":courses_count,
           "top_course":top_course,
           "categories":categories,
@@ -81,11 +96,28 @@ def allCourses(request):
 def aboutCourse(request,slug):
      course = Course.objects.get(slug=slug)
      sections = SectionVideo.objects.filter( course__slug = slug ) 
-     try:
-          check_enrolled = EnrolledCourse.objects.get(user = request.user,course = course,enrolled=False)
-     except:
-          check_enrolled = EnrolledCourse.objects.get(user = request.user,course = course)
-     if request.method == "POST" and check_enrolled:
+     enrolled = EnrolledCourse.objects.all()
+     enrolled_person = []
+     store_id = settings.STORE_ID
+     store_pass = settings.STORE_PASS
+     # settings = { 'store_id': store_id, 'store_pass': store_pass, 'issandbox': True }
+     for i in enrolled:
+          enrolled_person.append( i.user)
+     if request.user in enrolled_person:
+          try:
+               check_enrolled = EnrolledCourse.objects.get(user = request.user,course = course,enrolled=True)
+          except:
+               
+               check_enrolled = False 
+     else:
+               check_enrolled = False 
+          
+     # try:
+     #      check_enrolled = EnrolledCourse.objects.get(user = request.user,course = course,enrolled=False)
+     # except:
+     #      check_enrolled = EnrolledCourse.objects.get(user = request.user,course = course)
+     if request.method == "POST" and check_enrolled == False:
+     # if request.method == "POST" :
           # EnrolledCourse.objects.create(user = request.user,course = course,enrolled=True)
           # print("test")
           obj = EnrolledCourse(user = request.user,course = course,enrolled=True)
@@ -100,15 +132,83 @@ def aboutCourse(request,slug):
           "check_enrolled":check_enrolled,
      }
      return render(request,'course/about-course.html',context)
+@login_required(login_url='login')
+@csrf_exempt
+def initiate(request,pk):
+    course =  Course.objects.get(id = pk)
+    if request.method == 'POST':
+        if course.price <=0:
+             amount = 0
+        else:
+             amount = course.price - (course.price*course.discount*.01)
+        email = request.user
+        user= UserProfile.objects.get(user = request.user)
+        phone = user.phone_number 
+        user  = Account.objects.get(id = request.user.id)        
+        current_site = get_current_site(request)
+        response_data = initiate_payment(amount, email, phone,course.id,user.id ,current_site)
+        return redirect(response_data['GatewayPageURL'])
+    else:
+        return render(request, 'course/payment_gateway/index.html',{'course':course})
+# @login_required(login_url='login')
+@csrf_exempt
+def success(request,user_id,course_id):
+    # Get the payment data from the session
+    course = Course.objects.get(id = course_id)
+    payment_data = request.POST
+#     print(payment_data['cus_email'])
+#     print(payment_data)
+    if not payment_data:
+        return redirect('home')
+    
+    user  = Account.objects.get(id = user_id)
+    print(user)
+    # Get the transaction ID from the query string
+#     val_id = payment_data['cus_email']
+    print(request)
+#     user  = Account.objects.get(user = request.user)
+#     print(payment_data.keys())
+#     print(payment_data['course_id'])
+    payment = Payment.objects.create(
+        user=user,
+     #     user= user,
+     #    transaction_id=payment_data['tran_id'],
+        amount=payment_data['amount'],
+     #    currency=payment_data['currency'],
+        description=course.name,
+        status=payment_data['status'],
+        val_id=payment_data['val_id'],
+        
+    )
+    EnrolledCourse.objects.create(user = user , course = course , enrolled = True)
+    return redirect('dashboard')
+
+    # Render the success template with the payment object
+#     return render(request, 'course/payment_gateway/success.html', {'payment': payment})
+@csrf_exempt
+def failPayment(request,course_id):
+     course = Course.objects.get(id = course_id)
+     
+     context = {
+          'course':course
+     }
+     return render(request, 'course/payment_gateway/fail.html',context)
+
+
 
 def viewCourseCategoriesWise(request,slug):
-     courses = Course.objects.filter(active=True ,categories__slug  = slug)
+     courses = Course.objects.filter(active=True ,categories__slug  = slug).order_by('-id')
      category = Category.objects.get(slug=slug)
      courses_count = courses.count()
      top_course = Course.objects.filter(top_course = True)
      categories = Category.objects.all() 
+     
+     #pagination
+     paginator = Paginator(courses,2)
+     page = request.GET.get('page')
+     pagedCourses = paginator.get_page(page)
      context = {
-          "courses":courses,
+          "courses":pagedCourses,
           "courses_count":courses_count,
           "top_course":top_course,
           "categories":categories,
@@ -525,13 +625,15 @@ def showAllAssessment(request,slug):
      course = get_object_or_404(Course,slug = slug )
      assessment = Assessment.objects.filter(course = course)
      submitted_assessments = SubmittedAssessment.objects.filter(course = course )
-     marks = SubmittedAssessment.objects.filter(course = course,student_user__user=request.user)
+     marks = SubmittedAssessment.objects.filter(course = course,student_user__id=request.user.id) 
+     enrolled_user = EnrolledCourse.objects.get(course__slug = slug ,user__id=request.user.id)
      
      context = {
           "course" : course,
           "assessment" : assessment,
           "marks" : marks,
           "submitted_assessments" : submitted_assessments,
+          "enrolled_user" : enrolled_user,
      }
      return render(request,'course/show-all-assessment.html',context)
 
@@ -582,9 +684,14 @@ def updateAssessmentUser(request,slug,pk,student_user):
 def submitOrUpdateAssessmentUser(request,slug,pk,student_user):
      course = Course.objects.get(slug=slug)
      assessment = Assessment.objects.get(id = pk)
-     
      try:
-          submitted_assessment = SubmittedAssessment.objects.get( course = course,assessment = assessment,student_user__user__id = student_user )
+          test = EnrolledCourse.objects.filter(user__id = student_user)
+          # print(test[0][0])
+          test = True
+     except:
+          test = False
+     try:
+          submitted_assessment = SubmittedAssessment.objects.get( course__slug = slug,assessment__id = pk,student_user__id = student_user )
           if request.method == "POST":
                form = SubmittedAssessmentForm(request.POST,instance = submitted_assessment)
                form.save()
@@ -593,11 +700,11 @@ def submitOrUpdateAssessmentUser(request,slug,pk,student_user):
           else:
                form = SubmittedAssessmentForm( instance = submitted_assessment)
      except:
-          student = EnrolledCourse.objects.get(user = request.user)
+          # student = EnrolledCourse.objects.get(user__id = request.user.id)
           if request.method =="POST":
                form = SubmittedAssessmentForm(request.POST)
                submitted_answer = form.save(commit=False)
-               submitted_answer.student_user = student
+               submitted_answer.student_user = request.user
                submitted_answer.assessment = assessment 
                submitted_answer.course = course 
                submitted_answer.save()
@@ -657,8 +764,8 @@ def submittedUserSearch(request,slug):
 @login_required(login_url='login')
 def showAllSubmittedAssessmentDetail(request,slug,student_user):
      course = get_object_or_404(Course,slug = slug ,instructor=request.user.userprofile)
-     submitted_assesments = SubmittedAssessment.objects.filter(course__slug = slug ,student_user__user__id=student_user  ).order_by('-assessment')
-     count = SubmittedAssessment.objects.filter(course__slug = slug, student_user__user__id=student_user ).count()
+     submitted_assesments = SubmittedAssessment.objects.filter(course__slug = slug ,student_user__id = student_user  ).order_by('-assessment')
+     count = SubmittedAssessment.objects.filter(course__slug = slug, student_user__id=student_user ).count()
 
      context = {
           "course" : course,

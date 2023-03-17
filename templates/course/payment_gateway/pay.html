@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load course_custom_tags %}
+{% block title %}
+All Tags
+{% endblock title %}
+{% block content %}
+<div class="container">
+
+    	<h1>Pay Now</h1>
+	{% if response.status == 'SUCCESS' %}
+	{% csrf_token %}
+
+		<iframe src="{{ response.GatewayPageURL }}" width ="100%" height="600px">
+
+		</iframe>
+	{% else %}
+		<p>Error: {{ response.failedreason }}</p>
+	{% endif %}
+</div>
+{% endblock %}

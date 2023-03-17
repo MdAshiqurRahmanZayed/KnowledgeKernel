@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load course_custom_tags %}
+{% block title %}
+All Tags
+{% endblock title %}
+{% block content %}
+<div class="container">
+     <h1>
+          Your payment is
+          {% if 'fail' in request.path %}
+               failed               
+          {% else %}
+               cancel
+          {% endif %}
+     </h1>
+     <a href="{% url 'about_course' course.slug %}">
+
+          <div class="btn btn-primary">
+               Go Back
+          </div>
+     </a>
+          
+</div>
+{% endblock %}
