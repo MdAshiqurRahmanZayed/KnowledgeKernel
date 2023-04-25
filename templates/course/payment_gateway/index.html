@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load course_custom_tags %}
+{% block title %}
+All Tags
+{% endblock title %}
+{% block content %}
+<div class="container">
+
+     <h1>Initiate Payment</h1>
+	<form method="POST" action="{% url 'initiate_payment' course.id %}">
+          {% csrf_token %}
+		<label for="amount">Amount:</label>
+		<input type="number" name="amount" required><br><br>
+		<label for="email">Email:</label>
+		<input type="email" name="email" required><br><br>
+		<label for="phone">Phone:</label>
+		<input type="text" name="phone" required><br><br>
+		<input type="submit" value="Pay Now">
+	</form>
+</div>
+{% endblock %}

@@ -1,174 +1,579 @@
-<style>
-     /* General design */
-     body {
-          font-family: 'sans-serif';
-     }
-
-     .wrapper {
-          margin-left: 1rem;
-          border: 1px solid lightgrey;
-          border-radius: 5px;
-     }
-
-     .content {
-          height: auto;
-          /* here is the starting point */
-          max-height: 1000px;
-          padding: 0;
-          background-color: #f3f3f7;
-          overflow: hidden;
-
-          transition-property: opacity, max-height;
-          transition-duration: 1s, 0.5s;
-     }
-
-     .activator {
-          cursor: pointer;
-          padding: .5em;
-          border-bottom: 1px solid lightgrey;
-     }
-
-     .block {
-          display: block;
-          border: 1px dotted grey;
-          margin: 0.5em;
-          padding: 0.5em;
-          border-radius: 5px;
-     }
-
-
-
-     /* Collapse */
-     .wrapper .activator:after {
-          content: "🔻";
-          height: 1em;
-          width: 1em;
-          display: inline-block;
-
-          transition: transform 0.3s linear;
-     }
-
-     .wrapper.collapsed .activator:after {
-          transform: rotate(-0.25turn);
-     }
-
-     .wrapper.collapsed .content {
-          max-height: 0;
-          opacity: 0;
-     }
-</style>
-
-<h3>Collapse height:auto using css</h3>
-<div class="activator" onclick="toogleSelection('my-scope')">
-     Click to toggle view
-</div>
-<div id="my-scope" class="wrapper collapsed">
-     <div class="content">
-          <div class="block">Some content a</div>
-          <div class="block">Some content b</div>
-          <div class="block">Some content c</div>
-
-     </div>
-</div>
-<div id="my-scope01" class="wrapper collapsed">
-     <div class="activator" onclick="toogleSelection('my-scope01')">
-          Click to toggle view
-     </div>
-     <div class="content">
-          <div class="block">Some content a</div>
-          <div class="block">Some content b</div>
-          <div class="block">Some content c</div>
-
-     </div>
-</div>
-
-
-<button onclick="myfunctionName('John')">Click</button>
-<div class="youtube">
-
-</div>
-<script>
-     function toogleSelection(id) {
-          document.getElementById(id).classList.toggle('collapsed');
-     }
-
-     // Not required
-     function removeElement(element) {
-          element.remove();
-     }
-
-     function myfunctionName(String) {
-          var aa = document.getElementById('youtube');
-          aa.innerHTML ="sdva";
-     }
-</script>
-
-<!DOCTYPE HTML>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 
 <head>
+     <meta charset="UTF-8">
+     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v6.3.0/css/all.css" integrity="sha384-XXXXXX"
+          crossorigin="anonymous">
+
+
+     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.css">
+     <script src="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.js"></script>
+     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.js">
+     </script>
+
+     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.js">
+     </script>
+
+     <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/ui-lightness/jquery-ui.css"
+          rel="stylesheet" type="text/css" />
+
+
      <title>
-          JavaScript
-          | Pass string parameter in onClick function.
+
+
+          KnowledgeKernel
+
      </title>
+     <style>
+          .background {
+               padding: 0px;
+               margin: 0px;
+
+               border-radius: 0 0 30% 0;
+               height: 1100px;
+               background: #84D2C5;
+               /*   background-image: linear-gradient(120deg, #84D2C5, #567189); */
+          }
+
+
+          .index-main {
+               display: flex;
+          }
+
+          .home-left {
+
+               left: 0px;
+          }
+
+
+          .home-right {
+               right: 0px;
+
+
+          }
+
+          .text-white {
+               color: white;
+
+          }
+
+          .hero-text {
+
+               font-size: 80px;
+          }
+
+          .hero-color {
+               color: #C27664;
+               font-weight: bold;
+               text-shadow: 7px 5px 6px #4f3029;
+          }
+
+          .navbar-container {
+               background-image: linear-gradient(120deg, #84D2C5, #567189);
+
+          }
+
+          .navbar {
+               background: #84D2C5;
+               /* background-color: #0000000; */
+               transition: background-color 2s ease;
+               margin: 0px;
+               padding: 0px;
+          }
+
+          .navbar-bg {}
+
+          .navbar.scrolled {
+               background-color: #247881;
+          }
+
+
+
+          .discovery-items {
+               font-size: 100px;
+          }
+
+          .hero-search input {
+               width: 500px;
+               background: url(search.svg) no-repeat scroll 7px 7px left;
+               padding-left: 30px;
+          }
+
+          .icon {
+               padding-left: 25px;
+               background: url("https://static.thenounproject.com/png/101791-200.png") no-repeat left;
+               background-size: 20px;
+               background-color: white;
+          }
+
+          .search-btn {
+               right: -10px;
+          }
+
+          .left-space {
+               position: relative;
+               left: -60px;
+               padding: 20px;
+          }
+
+          .left-space-text {
+               position: relative;
+               left: -120px;
+               padding: 20px;
+          }
+
+          .carousel-control-prev-icon,
+          .carousel-control-next-icon {
+               height: 100px;
+               width: 100px;
+               outline: black;
+               background-size: 100%, 100%;
+               border-radius: 50%;
+               border: 2px solid black;
+               background-image: none;
+          }
+
+          .carousel-control-next-icon:after {
+               content: '>';
+               font-size: 150px;
+               color: #3F979B;
+               bottom: 80px;
+               position: relative;
+          }
+
+          .carousel-control-prev-icon:after {
+               content: '<';
+               font-size: 150px;
+               color: #3F979B;
+               bottom: 80px;
+               position: relative;
+          }
+
+          .discovery {
+               margin-top: 80px;
+          }
+
+
+          /* Card */
+          .image-fit {
+
+               width: auto;
+               height: 250px;
+               object-fit: cover;
+               border-top-left-radius: inherit;
+               border-top-right-radius: inherit;
+          }
+
+          .footer {
+               position: sticky;
+               display: flex;
+               justify-content: center;
+               background-color: #1C82AD;
+               height: 80px;
+               align-items: center;
+          }
+
+          .dropdown .dropdown-menu {
+               display: none;
+          }
+
+          .dropdown:hover>.dropdown-menu,
+          .dropend:hover>.dropdown-menu {
+               display: block;
+               margin-top: .125em;
+               margin-left: .125em;
+
+          }
+
+          @media screen and (min-width:769px) {
+               .dropend:hover>.dropdown-menu {
+                    position: absolute;
+                    top: 0;
+                    left: 100%;
+                    margin-left: .125em;
+               }
+
+          }
+     </style>
 </head>
 
-<style>
-     .video-container {
-  position: relative;
-  padding-bottom: 56.25%;
-}
+<body>
+     <nav class="navbar navbar-expand-lg navbar-dark ">
+          <div class="container-fluid">
+               <a class="navbar-brand" href="#">Brand</a>
+               <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#main_nav"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+               </button>
+               <div class="collapse navbar-collapse text-primary" id="main_nav">
+                    <ul class="navbar-nav">
+                         <li class="nav-item active"> <a class="nav-link" href="#">Home </a> </li>
+                         <li class="nav-item"><a class="nav-link" href="#"> About </a></li>
+                         <li class="nav-item dropdown">
+                              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                                   data-bs-toggle="dropdown" aria-expanded="false">
+                                   Dropdown
+                              </a>
+                              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                   <li><a class="dropdown-item" href="#">Action</a></li>
+                                   <li><a class="dropdown-item" href="#">Another action</a></li>
+                                   <li>
+                                        <hr class="dropdown-divider">
+                                   </li>
+                                   <li class="nav-item dropend">
+                                        <a class="nav-link dropdown-toggle text-dark" href="#" id="navbarDropdown"
+                                             role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                             Dropdown
+                                        </a>
+                                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                             <li><a class="dropdown-item" href="#">Action</a></li>
+                                             <li><a class="dropdown-item" href="#">Another action</a></li>
+                                             <li class="nav-item dropend">
+                                                  <a class="nav-link dropdown-toggle text-dark" href="#"
+                                                       id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+                                                       aria-expanded="false">
+                                                       Dropdown
+                                                  </a>
+                                                  <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                                       <li><a class="dropdown-item" href="#">Action</a></li>
+                                                       <li><a class="dropdown-item" href="#">Another action</a></li>
+                                                       <li>
+                                                            <hr class="dropdown-divider">
+                                                       </li>
+                                                       <li class="nav-item dropend">
+                                                            <a class="nav-link dropdown-toggle text-dark" href="#"
+                                                                 id="navbarDropdown" role="button"
+                                                                 data-bs-toggle="dropdown" aria-expanded="false">
+                                                                 Dropdown
+                                                            </a>
+                                                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                                                 <li><a class="dropdown-item" href="#">Action</a></li>
+                                                                 <li><a class="dropdown-item" href="#">Another
+                                                                           action</a></li>
+                                                                 <li>
+                                                                      <hr class="dropdown-divider">
+                                                                 </li>
+                                                                 <li><a class="dropdown-item" href="#">Something else
+                                                                           here</a></li>
+                                                            </ul>
+                                                       </li>
+                                                  </ul>
+                                             </li>
+                                        </ul>
+                                   </li>
+                              </ul>
+                         </li>
+                    </ul>
+               </div>
+               <!-- navbar-collapse.// -->
+          </div>
+          <!-- container-fluid.// -->
+     </nav>
+     <!--
 
-.video-container iframe {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-}
-.video {
-  aspect-ratio: 16 / 9;
-  width: 100%;
-}
+     <nav class="navbar navbar-expand-lg  navbar-dark sticky-top">
+          <div class="container-fluid">
+               <a class="navbar-brand" href="#">KnowledgeKernel</a>
+               <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+               </button>
+               <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                         <li class="nav-item">
+                              <a class="nav-link active" aria-current="page" href="#">Home</a>
+                         </li>
+                         <li class="nav-item dropdown" id="myDropdown">
+                              <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown"> Treeview menu </a>
+                              <ul class="dropdown-menu">
+                                   <li> <a class="dropdown-item" href="#"> Dropdown item 1 </a></li>
+                                   <li> <a class="dropdown-item" href="#"> Dropdown item 2 &raquo; </a>
+                                        <ul class="submenu dropdown-menu">
+                                             <li><a class="dropdown-item" href="#">Submenu item 1</a></li>
+                                             <li><a class="dropdown-item" href="#">Submenu item 2</a></li>
+                                             <li><a class="dropdown-item" href="#">Submenu item 3 &raquo; </a>
+                                                  <ul class="submenu dropdown-menu">
+                                                       <li><a class="dropdown-item" href="#">Multi level 1</a></li>
+                                                       <li><a class="dropdown-item" href="#">Multi level 2</a></li>
+                                                  </ul>
+                                             </li>
+                                             <li><a class="dropdown-item" href="#">Submenu item 4</a></li>
+                                             <li><a class="dropdown-item" href="#">Submenu item 5</a></li>
+                                        </ul>
+                                   </li>
+                                   <li><a class="dropdown-item" href="#"> Dropdown item 3 </a></li>
+                                   <li><a class="dropdown-item" href="#"> Dropdown item 4 </a></li>
+                              </ul>
+                         </li>
+
+                    </ul>
+
+               </div>
+          </div>
+     </nav>
+-->
 
 
-</style>
-<body style="text-align:center;" id="body">
 
-     <p id="GFG_UP" >
 
-     </p>
-     <button onclick="GFG_Fun('8KrLAmuhfkQ'); ">
-          click here
-     </button>
-     <p id="GFG_DOWN">
-     </p>
-     <div class="video-container">
-  <iframe
-    src="https://www.youtube.com/embed/msizPweg3kE"
-    frameborder="0"
-    allow="accelerometer; autoplay; encrypted-media; gyroscope;"
-    allowfullscreen></iframe>
-    <iframe
-  class="video"
-  src="https://www.youtube.com/embed/msizPweg3kE"
-  frameborder="0"
-  allow="accelerometer; autoplay; encrypted-media; gyroscope;"
-  allowfullscreen></iframe>
+     <div class="background">
 
-</div>
+          <!-- section index main -->
+
+          <div class="index-main p-5 ">
+               <div class="row">
+                    <div class="col home-left d-flex align-items-center">
+
+                         <div class="home-left  ">
+                              <h1 class="hero-text">
+                                   <div class="hero-color">Learn And Teach</div>
+                                   <div class="text-white">From Anywhere</div>
+                              </h1>
+                              <h4 class="text-white">Technology is bringing a massive wave of <b>evolution</b> on
+                                   learning things in different ways. </h4>
+                              <br>
+                              <form class="container hero-search d-flex ">
+
+                                   <input type="search" class="icon form-control me-2" type="search"
+                                        placeholder="Search Course" aria-label="Search">
+                              </form>
+
+                         </div>
+                    </div>
+
+                    <div class="col d-flex justify-content-center">
+                         <div class="home-right ">
+
+                              <img src="../static/images/web.svg" alt="" height="500px">
+                         </div>
+                    </div>
+
+
+               </div>
+          </div>
+
+     </div>
+     <!-- section Discovery -->
+     <div class="container  discovery ">
+          <h1 class="text-center">Why Study With KnowledgeKernel</h1>
+          <h4 class="text-center">Discover your perfect program in our courses.</h4>
+          <div class="discovery-items">
+               <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-inner d-flex justify-content-center">
+                         <div class="carousel-item active ">
+                              <div class="left-space">
+
+                                   <i class="fa-solid fa-wand-magic-sparkles"></i>
+                              </div>
+                              <h3 class="left-space-text">Learn Design</h3>
+                         </div>
+                         <div class="carousel-item ">
+                              <div class="left-space">
+                                   <i class="fa-solid fa-business-time"></i>
+                              </div>
+                              <h3 class="left-space-text">Learn Business</h3>
+                         </div>
+                         <div class="carousel-item ">
+                              <div class="left-space">
+                                   <i class="fa-brands fa-uncharted"></i>
+                              </div>
+                              <h3 class="left-space-text">Learn Software</h3>
+                         </div>
+
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls"
+                         data-bs-slide="prev">
+                         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                         <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls"
+                         data-bs-slide="next">
+                         <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                         <span class="visually-hidden">Next</span>
+                    </button>
+               </div>
+
+
+               <i class="fa-regular fa-brain-circuit"></i>
+          </div>
+     </div>
+
+     <!-- section Card -->
+     <div class="container">
+          <h2>Top Courses</h2>
+
+          <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3">
+
+               <div class="col">
+                    <div class="card m-2 rounded-4">
+                         <img class="image-fit "
+                              src="https://images.unsplash.com/photo-1622737133809-d95047b9e673?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTR8fGFydHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60"
+                              class="card-img-top" alt="...">
+                         <div class="card-body">
+                              <h5 class="card-title">Card title</h5>
+                              <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                              <a href="#" class="btn btn-primary">Go somewhere</a>
+                         </div>
+                    </div>
+               </div>
+               <div class="col">
+                    <div class="card m-2 rounded-4">
+                         <img class="image-fit "
+                              src="https://images.unsplash.com/photo-1625014618427-fbc980b974f5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1064&q=80"
+                              class="card-img-top" alt="...">
+                         <div class="card-body">
+                              <h5 class="card-title">Card title</h5>
+                              <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                              <a href="#" class="btn btn-primary">Go somewhere</a>
+                         </div>
+                    </div>
+               </div>
+               <div class="col">
+                    <div class="card m-2 rounded-4">
+                         <img class="image-fit "
+                              src="https://images.unsplash.com/photo-1625014618427-fbc980b974f5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1064&q=80"
+                              class="card-img-top" alt="...">
+                         <div class="card-body">
+                              <h5 class="card-title">Card title</h5>
+                              <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                              <a href="#" class="btn btn-primary">Go somewhere</a>
+                         </div>
+                    </div>
+               </div>
+               <div class="col">
+                    <div class="card m-2 rounded-4">
+                         <img class="image-fit "
+                              src="https://images.unsplash.com/photo-1625014618427-fbc980b974f5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1064&q=80"
+                              class="card-img-top" alt="...">
+                         <div class="card-body">
+                              <h5 class="card-title">Card title</h5>
+                              <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                              <a href="#" class="btn btn-primary">Go somewhere</a>
+                         </div>
+                    </div>
+               </div>
+               <div class="col">
+                    <div class="card m-2 rounded-4">
+                         <img class="image-fit "
+                              src="https://images.unsplash.com/photo-1625014618427-fbc980b974f5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1064&q=80"
+                              class="card-img-top" alt="...">
+                         <div class="card-body">
+                              <h5 class="card-title">Card title</h5>
+                              <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                              <a href="#" class="btn btn-primary">Go somewhere</a>
+                         </div>
+                    </div>
+               </div>
+               <div class="col">
+                    <div class="card m-2 rounded-4">
+                         <img class="image-fit "
+                              src="https://images.unsplash.com/photo-1625014618427-fbc980b974f5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1064&q=80"
+                              class="card-img-top" alt="...">
+                         <div class="card-body">
+                              <h5 class="card-title">Card title</h5>
+                              <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                              <a href="#" class="btn btn-primary">Go somewhere</a>
+                         </div>
+                    </div>
+               </div>
+
+
+          </div>
+          <div class="container d-flex justify-content-center align-items-center p-3">
+
+
+               <div class="btn btn-outline-primary w-50 ">
+                    Show All
+               </div>
+          </div>
+     </div>
+     <!-- section Footer -->
+     <div class="footer text-white">
+          <h4>Copyright © 2023 CreativeLayers. All Right Reserved.</h4>
+     </div>
+
+
+
+
+
 
      <script>
+          document.addEventListener("DOMContentLoaded", function () {
+               // make it as accordion for smaller screens
+               if (window.innerWidth < 992) {
 
-          var down = document.getElementById('GFG_DOWN');
+                    // close all inner dropdowns when parent is closed
+                    document.querySelectorAll('.navbar .dropdown').forEach(function (everydropdown) {
+                         everydropdown.addEventListener('hidden.bs.dropdown', function () {
+                              // after dropdown is hidden, then find all submenus
+                              this.querySelectorAll('.submenu').forEach(function (
+                                   everysubmenu) {
+                                   // hide every submenu as well
+                                   everysubmenu.style.display = 'none';
+                              });
+                         })
+                    });
 
+                    document.querySelectorAll('.dropdown-menu a').forEach(function (element) {
+                         element.addEventListener('click', function (e) {
+                              let nextEl = this.nextElementSibling;
+                              if (nextEl && nextEl.classList.contains('submenu')) {
+                                   // prevent opening link if link needs to open dropdown
+                                   e.preventDefault();
+                                   if (nextEl.style.display == 'block') {
+                                        nextEl.style.display = 'none';
+                                   } else {
+                                        nextEl.style.display = 'block';
+                                   }
 
-          function GFG_Fun(parameter) {
-               down.innerHTML = '<iframe width="560" height="315" src="https://www.youtube.com/embed/'+parameter+'" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'
-                    
+                              }
+                         });
+                    })
+               }
+               // end if innerWidth
+          });
+          var navbar = document.querySelector('.navbar');
+          var threshold = 200;
+
+          window.addEventListener('scroll', function () {
+          if (window.scrollY >= threshold) {
+               navbar.classList.add('scrolled');
+          } else {
+               navbar.classList.remove('scrolled');
           }
-          
+          });
+
+          // end if innerWidth
+          });
      </script>
+     <script src="https://kit.fontawesome.com/5daa8eb347.js" crossorigin="anonymous"></script>
+
+
+
+     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+          integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous">
+     </script>
+     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"
+          integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous">
+     </script>
+     <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.1/css/fontawesome.min.css"
+          integrity="sha384-QYIZto+st3yW+o8+5OHfT6S482Zsvz2WfOzpFSXMF9zqeLcFV0/wlZpMtyFcZALm" crossorigin="anonymous">
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css"
+          integrity="sha512-1sCRPdkRXhBV2PBLUdRb4tMg1w2YPf37qatUFeS7zlBy7jJI8Lf4VHwWfZZfpXtYSLy85pkm9GaYVYMfw5BC1A=="
+          crossorigin="anonymous" referrerpolicy="no-referrer" />
+     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+
+     <script src="{% static 'js/main.js' %}"></script>
+
 </body>
 
 </html>

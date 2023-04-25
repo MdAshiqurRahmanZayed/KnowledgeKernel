@@ -2,10 +2,13 @@ from django.urls import path
 from .views import *
 urlpatterns = [
      path('',homepage,name="home"),
-     path('my-courses/',myCreatedCourse,name="myCreatedCourse"),
+     path('all-courses',allCourses,name="allCourses"),
+     path('my-courses/',myCourses,name="myCourses"),
+     path('my-created-courses/',myCreatedCourse,name="myCreatedCourse"),
      path('about-course/<str:slug>',aboutCourse,name="about_course"),
      path('all-Tags/',allTags,name="allTags"),
      path ('search/',searchCourse,name= "searchCourse"),
+     path ('category/<slug:slug>',viewCourseCategoriesWise,name= "viewCourseCategoriesWise"),
      #Course
      path('create-course/',createCourse,name="create_course"),
      path('update-course/<str:slug>/',updateCourse,name="updateCourse"),
@@ -44,7 +47,14 @@ urlpatterns = [
      path('course/<str:slug>/mark-assessment/assessment/<int:assessment_pk>/submitted-assessment/<int:submitted_pk>/submitted-user/<int:student_user>/',markAssessment,name="markAssessment"),
      
      
-     
-     
      path('course/<slug:slug>/learn/lecture/<str:video_unique_id>/',courseDetail,name="courseDetail"),
+     # payment
+     path('initiate-payment/<str:pk>', initiate, name='initiate_payment'),
+     path('<int:user_id>/<int:course_id>/payment/success/', success, name='success'),
+     path('<int:course_id>/payment/failure/', failPayment, name='failPayment'),
+     path('<int:course_id>/payment/cancel/', failPayment, name='cancelPayment'),
+     
+     #about Page
+    path('about/',About_page,name='about'),
+     
 ]

@@ -11,7 +11,7 @@
      <h1><b> {{course.name}} </b> </h1>
      <div class="row">
           <div class="col-md-9">
-               <img src="{{course.thumbnail.url}}" alt="">
+               <img src="{{course.thumbnail.url}}" height="500px" width="820px" alt="">
                <h3>
                     <b>About Course:</b><br>
                     {{course.description}}
@@ -34,7 +34,7 @@
                               {% for video in item.video_set.all  %}
                               {% comment %} {{video.video_id}} {% endcomment %}
                               <div class="content  ">
-                                   {% if video.is_preview  is False %}
+                                   {% if video.is_preview  is False and check_enrolled == False  %}
 
 
                                    <div
@@ -107,6 +107,7 @@
                <h4><b>This course includes:</b></h4>
                <h5>Price: {{course.price}} </h5>
                <h5>Discount: {{course.discount}} </h5>
+               <h5>Real Price: {% course_sell_price course.price course.discount as value %} {{value|dollar}}</h5>
                <h5>Tags: <ul>
 
                          {% for tag in course.tags.all %}
@@ -119,7 +120,24 @@
                     </ul>
                </h5>
                <h5>Length: {{course.length}} hours on-demand video</h5>
+               {% if check_enrolled is False and user.is_authenticated  and user.userprofile %}
 
+               <form class="" method="POST">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-primary mb-3">Enroll Course</button>
+
+               </form>
+               <form method="POST" action="{% url 'initiate_payment' course.id %}">
+                    {% csrf_token %}
+                    <input type="submit" value="Pay Now">
+               </form>
+
+               {% endif %}
+               {% comment %} <form method="POST" action="{% url 'initiate_payment' course.id %}">
+                    {% csrf_token %}
+                    <input type="submit" value="Pay Now">
+               </form> {% endcomment %}
+               {% comment %} <button><a href="{% url 'initiate_payment' course.id %}">Pay Now</a></button> {% endcomment %}
           </div>
 
      </div>

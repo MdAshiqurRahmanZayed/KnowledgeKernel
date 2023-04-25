@@ -9,7 +9,7 @@ My Course
 
 <!-- ========================= SECTION CONTENT ========================= -->
 <section class="section-conten padding-y bg mb-3">
-     
+
      <div class="container mt-2">
           {% include 'includes/alerts.html' %}
           <div class="row">
@@ -22,6 +22,72 @@ My Course
                                    My Courses
                               </strong>
                          </header>
+
+
+                         {% if 'my-courses' in request.path %}
+                         <div class="card-body">
+                              <div class="row">
+                                   <div class="col-md-12">
+                                        <div class="card" style="text-align:center">
+                                             <div class="card-body">
+                                                  <h5 class="card-title">
+                                                       Total 
+                                                       
+                                                       {% if 'my-created-courses' in request.path %}
+                                                            
+                                                       Created 
+                                                       {% else %}
+                                                       Enrolled
+                                                       {% endif %}
+                                                             
+                                                       Course : <b>{{enrolledCourseCount}}</b>
+                                                  </h5>
+
+                                             </div>
+
+                                        </div>
+
+                                        <div class="card mt-5">
+                                             <div class="card-body">
+
+                                                  <table class="table">
+                                                       <thead>
+                                                            <tr>
+
+                                                                 <th scope="col">Name of the courses:</th>
+
+
+                                                            </tr>
+                                                       </thead>
+                                                       <tbody>
+                                                            {% for course in enrolledCourse %}
+                                                            <tr>
+
+
+                                                                 <td>
+                                                                      <a href="{% url 'about_course' course.course.slug %}">
+
+                                                                           {{course.course.name}} 
+                                                                      </a>
+
+                                                                 </td>
+
+
+
+                                                            </tr>
+                                                            {% endfor %}
+
+                                                       </tbody>
+                                                  </table>
+
+                                             </div>
+                                        </div>
+                                   </div>
+
+                              </div> <!-- row.// -->
+                         </div> <!-- card-body .// -->
+
+                         {% else %}
                          <div class="card-body">
                               <div class="row">
                                    <div class="col-md-12">
@@ -37,34 +103,36 @@ My Course
 
                                         <div class="card mt-5">
                                              <div class="card-body">
-                                                  
+
                                                   <table class="table">
                                                        <thead>
                                                             <tr>
 
                                                                  <th scope="col">Name of the courses:</th>
-                                                                 
+                                                                 <th scope="col">Total member:</th>
+
 
                                                             </tr>
                                                        </thead>
                                                        <tbody>
                                                             {% for course in courses %}
                                                             <tr>
-                                                                 
-                                                                      
+
+
                                                                  <td>
                                                                       <a href="{% url 'updateCourse' course.slug %}">
 
                                                                            {{course}}
                                                                       </a>
-                                                                 
+
                                                                  </td>
-                                                                 
-                                                                
-                                                                 
+                                                                 <td>{{course.enrolledcourse_set.all.count}}</td>
+
+
+
                                                             </tr>
                                                             {% endfor %}
-                                                            
+
                                                        </tbody>
                                                   </table>
 
@@ -74,6 +142,10 @@ My Course
 
                               </div> <!-- row.// -->
                          </div> <!-- card-body .// -->
+
+
+                         {% endif %}
+
 
 
 

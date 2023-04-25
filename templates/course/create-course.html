@@ -20,6 +20,7 @@ Update course
                {% else %}
                {% include 'includes/dashboard_sidebar_course.html' %}
                {% endif %}
+
                <main class="col-md-9">
                     <article class="card">
 
@@ -35,6 +36,17 @@ Update course
                          </header>
                          <div class="container form-background ">
 
+
+                              {% if form.errors %}
+                              {% for field in form %}
+                              {% for error in field.errors %}
+                              <div class="text-danger">
+                                   <strong>{{ error|escape }}</strong>
+                              </div>
+                              {% endfor %}
+                              {% endfor %}
+                              {% endif %}
+
                               <form class="" method="POST" enctype="multipart/form-data">
                                    {% csrf_token %}
 
@@ -42,10 +54,15 @@ Update course
 
                                         <h4><b>Your Course Name</b> </h4>
                                         {{form.name}}
+
                                    </div>
                                    <div class="p-3">
                                         <h4><b>Description</b> </h4>
                                         {{form.description}}
+                                   </div>
+                                   <div class="p-3">
+                                        <h4><b>Category</b> </h4>
+                                        {{form.categories}}
                                    </div>
 
                                    <div class="p-3">
@@ -92,10 +109,10 @@ Update course
 
                                    <div class="p-3">
                                         <h4><b>Tags</b> </h4>
-                                        
-                                             <h6>
-                                                  <a href="{% url 'allTags' %}">Show all tags</a>
-                                             </h6>
+
+                                        <h6>
+                                             <a href="{% url 'allTags' %}">Show all tags</a>
+                                        </h6>
                                         {{form.tags}}
                                    </div>
 

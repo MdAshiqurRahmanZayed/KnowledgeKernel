@@ -1,15 +1,17 @@
 from django import forms
-from .models import Course,SectionVideo,Video,Assessment,SubmittedAssessment,Mark
+from .models import Course,SectionVideo,Video,Assessment,SubmittedAssessment
 from taggit.models import Tag 
-
+from courses.models import Category
 class CourseCreateForm(forms.ModelForm):
    #  tags = forms.ModelMultipleChoiceField(label='Tags', queryset=Tag.objects.order_by('name'),widget=forms.SelectMultiple)
     tags = forms.ModelMultipleChoiceField(label='Tags', queryset=Tag.objects.order_by('name'),widget=forms.SelectMultiple)
+    categories =  forms.ModelChoiceField(queryset=Category.objects.all(), widget=forms.Select(attrs={'class': 'form-control'}))
+    
    #  tags = forms.CharField(queryset=Tag.objects.order_by('name'),widget=forms.SelectMultiple)
    #  active = forms.BooleanField(widget=forms.CheckboxInput (attrs={'class':'form-check-input','type':'checkbox'}))
     class Meta:
         model = Course
-        fields = ["name","description","price","discount","thumbnail","tags","resource","length","prerequisite","learning","active"]
+        fields = ["name","description","categories","price","discount","thumbnail","tags","resource","length","prerequisite","learning","active"]
         widgets = {
              'description' : forms.Textarea(attrs={'class':'form-control'}),
          } 
@@ -79,7 +81,7 @@ class AssessmentForm(forms.ModelForm):
 class SubmittedAssessmentForm(forms.ModelForm):
    class Meta:
       model = SubmittedAssessment
-      fields = ['resource','resource_title']
+      fields = ['resource_title','resource']
    def __init__(self, *args, **kwargs):
          super(SubmittedAssessmentForm, self).__init__(*args, **kwargs)       
          self.fields['resource'].widget.attrs['class'] = 'form-control'

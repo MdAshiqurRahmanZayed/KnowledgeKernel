@@ -3,7 +3,8 @@
        <ul class="list-group">
     <a class="list-group-item {% if '/accounts/' == request.path %}active{% endif %}" href="{% url 'dashboard' %}"> Dashboard </a>
     {% if user.userprofile %}
-    <a class="list-group-item {% if '/my-courses/' in request.path %}active{% endif %}" href="{% url 'myCreatedCourse' %}"> My Courses </a>
+    <a class="list-group-item {% if '/my-created-courses/' in request.path %}active{% endif %}" href="{% url 'myCreatedCourse' %}"> My Created Courses </a>
+    <a class="list-group-item {% if '/my-courses/' in request.path %}active{% endif %}" href="{% url 'myCourses' %}"> My  Courses </a>
     <a class="list-group-item {% if '/edit-profile/' in request.path %}active{% endif %}" href="{% url 'edit_profile' %}"> Edit Profile </a>
     <a class="list-group-item {% if '/create-course/' in request.path %}active{% endif %}" href="{% url 'create_course' %}"> Create Course </a>
     
