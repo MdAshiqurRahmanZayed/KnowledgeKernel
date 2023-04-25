@@ -1,10 +1,12 @@
-import requests
+import requests 
+from django.conf import settings
+
 
 def initiate_payment(amount, email, phone,course_id,user_id,current_site):
     url = "https://sandbox.sslcommerz.com/gwprocess/v4/api.php" # use the production URL for live payments
     payload = {
-        'store_id': 'md64076ccf6a3aa',
-        'store_passwd': 'md64076ccf6a3aa@ssl',
+        'store_id': settings.STORE_ID,
+        'store_passwd': settings.STORE_PASS,
         # 'course_id': course_id,
         'total_amount': amount,
         'currency': 'BDT',

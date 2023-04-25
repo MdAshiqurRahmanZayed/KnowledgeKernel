@@ -1,6 +1,6 @@
 import email
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager 
 
 # Create your models here.
 class MyAccountManager(BaseUserManager):
@@ -94,7 +94,7 @@ class UserProfile(models.Model):
     first_name      = models.CharField(max_length=50)
     last_name       = models.CharField(max_length=50)
     profession       = models.CharField(max_length=50)
-    website         = models.CharField(max_length=70)
+    website         = models.CharField(max_length=70,blank=True,null=True)
     linkedin         = models.CharField(blank=True,null=True, max_length=50)
     about           = models.TextField()
     phone_number    = models.CharField(max_length=50)

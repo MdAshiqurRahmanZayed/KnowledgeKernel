@@ -171,3 +171,21 @@ class Payment(models.Model):
     
     def __str__(self):
         return f'{self.user} '
+    
+class AboutPage(models.Model):
+    name = models.CharField( max_length=50)
+    title = models.CharField( max_length=50)
+    about = models.TextField()
+    image  = models.ImageField( upload_to='about/', height_field=None, width_field=None, max_length=None)
+    def __str__(self):
+        return self.name
+
+
+
+class teamMember(models.Model):
+    name = models.CharField( max_length=50)
+    title = models.CharField( max_length=50)
+    about = models.TextField()
+    image  = models.ImageField( upload_to='teamMember/', height_field=None, width_field=None, max_length=None)
+    def __str__(self):
+        return self.name

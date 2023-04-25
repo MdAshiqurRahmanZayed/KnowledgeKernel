@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Course,Video,SectionVideo,Assessment,SubmittedAssessment,EnrolledCourse,Category,Payment
+from .models import Course,Video,SectionVideo,Assessment,SubmittedAssessment,EnrolledCourse,Category,Payment,AboutPage,teamMember
 # Register your models here.
 
 class CategoryAdmin(admin.ModelAdmin):
@@ -96,3 +96,5 @@ admin.site.register(SubmittedAssessment,SubmittedAssessmentAdmin)
 admin.site.register(EnrolledCourse,EnrolledAdmin) 
 admin.site.register(Category,CategoryAdmin)
 admin.site.register(Payment)
+admin.site.register(AboutPage)
+admin.site.register(teamMember)

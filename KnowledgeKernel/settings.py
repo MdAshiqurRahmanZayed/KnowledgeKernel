@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 from pathlib import Path
 import os
+from .info import *
 # from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -152,11 +153,11 @@ TAGGIT_CASE_INSENSITIVE = True
 
 
 # SMTP configuration
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_HOST_USER = 'email'
-EMAIL_HOST_PASSWORD = 'password'
-EMAIL_USE_TLS = True
+EMAIL_HOST = EMAIL_HOST
+EMAIL_PORT = EMAIL_PORT
+EMAIL_HOST_USER = EMAIL_HOST_USER
+EMAIL_HOST_PASSWORD = EMAIL_HOST_PASSWORD
+EMAIL_USE_TLS = EMAIL_USE_TLS
 
 
 #session time out
@@ -165,5 +166,5 @@ EMAIL_USE_TLS = True
 # SESSION_TIMEOUT_REDIRECT = 'accounts/login'
 
 #ssl commerz
-STORE_ID = "md64076ccf6a3aa"
-STORE_PASS = "md64076ccf6a3aa@ssl"
+STORE_ID = STORE_ID
+STORE_PASS = STORE_PASS

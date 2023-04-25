@@ -53,4 +53,8 @@ urlpatterns = [
      path('<int:user_id>/<int:course_id>/payment/success/', success, name='success'),
      path('<int:course_id>/payment/failure/', failPayment, name='failPayment'),
      path('<int:course_id>/payment/cancel/', failPayment, name='cancelPayment'),
+     
+     #about Page
+    path('about/',About_page,name='about'),
+     
 ]

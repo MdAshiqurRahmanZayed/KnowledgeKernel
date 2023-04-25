@@ -1,3 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Abhaya+Libre:wght@700&family=Alegreya:ital,wght@0,400;1,800&family=Merriweather&display=swap');
+
+*{
+       font-family: 'Alegreya',serif;
+}
+
 a {
    text-decoration: none;
 
@@ -130,6 +136,9 @@ a {
    color: #A27B5C;
    font-weight: bold;
    text-shadow: 7px 5px 6px #4f3029;
+}
+.hero-italic{
+   font-style: italic;
 }
 
 .navbar-container {

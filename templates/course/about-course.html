@@ -120,8 +120,7 @@
                     </ul>
                </h5>
                <h5>Length: {{course.length}} hours on-demand video</h5>
-
-               {% if check_enrolled is False and user.is_authenticated %}
+               {% if check_enrolled is False and user.is_authenticated  and user.userprofile %}
 
                <form class="" method="POST">
                     {% csrf_token %}

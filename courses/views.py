@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect,get_object_or_404
 from django.http import HttpResponse
-from .models import Course,Video,SectionVideo,Assessment,SubmittedAssessment,EnrolledCourse,Category,EnrolledCourse,Payment
+from .models import Course,Video,SectionVideo,Assessment,SubmittedAssessment,EnrolledCourse,Category,EnrolledCourse,Payment,AboutPage,teamMember
 from accounts.models import UserProfile
 from django.contrib.auth.decorators import login_required
 from .forms import CourseCreateForm,SectionForm,VideoForm,AssessmentForm,SubmittedAssessmentForm,MarkForm
@@ -800,3 +800,21 @@ def markAssessment(request,slug,assessment_pk,submitted_pk,student_user):
           'assessment':assessment,
      }
      return render(request,'course/mark.html',context)
+
+
+#About Page
+def About_page(request):
+    nstu = 'About NSTU'
+    vc = 'Vice Chancellor'
+    about_member = teamMember.objects.all
+    # about_nstu = About.objects.get()
+    about_nstu = AboutPage.objects.get(title=nstu)
+    about_vc = AboutPage.objects.get(title=vc)
+    context={
+        'about_member':about_member,
+        'about_nstu':about_nstu,
+        'about_vc':about_vc
+    }
+    
+    
+    return render(request,'course/about.html',context)
