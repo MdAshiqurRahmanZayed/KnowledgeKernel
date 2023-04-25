@@ -3,7 +3,7 @@ Knowledge-Kernel is an e-learning website through which the students will get th
 
 <br>
 NB:<br>
-1.Sign up need gmail verification.So You have to create a info.py in KnowledgeKernel folder and fill it just like info-demo.py <br>
+1.Sign up need gmail verification.So You have to create a info.py in KnowledgeKernel folder and fill it just like info-demo.py.after sign in you need to complete your profile for creating coirse and enrolling course.<br>
 2.Only Youtube video are allowed.<br>
 3.if youtube video link is https://www.youtube.com/watch?v=66LP3XPv-nQ then  Video id will be 66LP3XPv-nQ .<br>
 4.In Assignment section only pdf drive link can be shared.no need uploaded.<br>
